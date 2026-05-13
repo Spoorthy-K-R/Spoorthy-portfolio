@@ -249,15 +249,29 @@ const OUTLINE_PATHS = [
 ];
 
 const INTERIOR_CLOUDS = [
-  { lng: -116, lat: 52, count: 12, spreadLng: 18, spreadLat: 8 },
-  { lng: -103, lat: 40, count: 22, spreadLng: 24, spreadLat: 12 },
-  { lng: -84, lat: 36, count: 14, spreadLng: 18, spreadLat: 10 },
-  { lng: -61, lat: -12, count: 12, spreadLng: 20, spreadLat: 18 },
-  { lng: 10, lat: 50, count: 12, spreadLng: 20, spreadLat: 8 },
-  { lng: 18, lat: 6, count: 14, spreadLng: 22, spreadLat: 18 },
-  { lng: 51, lat: 28, count: 10, spreadLng: 16, spreadLat: 8 },
-  { lng: 78, lat: 21, count: 18, spreadLng: 13, spreadLat: 10 },
-  { lng: 92, lat: 30, count: 10, spreadLng: 16, spreadLat: 10 },
+  { lng: -118, lat: 53, count: 18, spreadLng: 22, spreadLat: 10 },
+  { lng: -101, lat: 42, count: 30, spreadLng: 28, spreadLat: 14 },
+  { lng: -82, lat: 37, count: 22, spreadLng: 20, spreadLat: 12 },
+  { lng: -103, lat: 22, count: 14, spreadLng: 18, spreadLat: 10 },
+  { lng: -76, lat: 16, count: 10, spreadLng: 16, spreadLat: 9 },
+  { lng: -63, lat: -12, count: 20, spreadLng: 24, spreadLat: 22 },
+  { lng: -70, lat: -31, count: 10, spreadLng: 12, spreadLat: 12 },
+  { lng: -2, lat: 53, count: 14, spreadLng: 12, spreadLat: 7 },
+  { lng: 10, lat: 50, count: 24, spreadLng: 22, spreadLat: 9 },
+  { lng: 25, lat: 57, count: 10, spreadLng: 20, spreadLat: 7 },
+  { lng: 26, lat: 40, count: 12, spreadLng: 22, spreadLat: 10 },
+  { lng: 31, lat: 27, count: 12, spreadLng: 16, spreadLat: 10 },
+  { lng: 19, lat: 4, count: 24, spreadLng: 28, spreadLat: 24 },
+  { lng: 29, lat: -20, count: 14, spreadLng: 18, spreadLat: 18 },
+  { lng: 47, lat: 30, count: 18, spreadLng: 18, spreadLat: 9 },
+  { lng: 64, lat: 42, count: 12, spreadLng: 22, spreadLat: 10 },
+  { lng: 78, lat: 21, count: 30, spreadLng: 15, spreadLat: 12 },
+  { lng: 89, lat: 25, count: 14, spreadLng: 12, spreadLat: 9 },
+  { lng: 93, lat: 43, count: 12, spreadLng: 24, spreadLat: 11 },
+  { lng: 103, lat: 32, count: 18, spreadLng: 14, spreadLat: 12 },
+  { lng: 103, lat: 11, count: 18, spreadLng: 13, spreadLat: 11 },
+  { lng: 107, lat: -5, count: 10, spreadLng: 10, spreadLat: 10 },
+  { lng: 102, lat: 54, count: 10, spreadLng: 16, spreadLat: 8 },
 ];
 
 function createSeededRandom(seed) {
@@ -283,6 +297,22 @@ function geoToCanvas(lng, lat, width, height) {
 function withAlpha(color, alpha) {
   const [r, g, b] = color.match(/\d+/g);
   return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function clamp(value, min = 0, max = 1) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function easeInCubic(value) {
+  return value * value * value;
+}
+
+function easeOutCubic(value) {
+  return 1 - Math.pow(1 - value, 3);
+}
+
+function lerp(from, to, amount) {
+  return from + (to - from) * amount;
 }
 
 function samplePath(points, stepDegrees = 6) {
@@ -341,7 +371,7 @@ function buildScene(width, height) {
   const stars = [];
   const starsById = {};
 
-  const ambientCount = Math.min(34, Math.floor((width * height) / 60000));
+  const ambientCount = Math.min(52, Math.floor((width * height) / 42000));
   for (let i = 0; i < ambientCount; i++) {
     stars.push({
       id: `ambient-${i}`,
@@ -439,20 +469,194 @@ function buildScene(width, height) {
   return { stars, starsById };
 }
 
-function drawRoutes(ctx, scene, time) {
+function drawRoutes(ctx, scene, time, scrollProgress) {
+  const routeAdvance = clamp((scrollProgress - 0.24) / 0.38) * ROUTE_SEGMENTS.length;
+
   ROUTE_SEGMENTS.forEach(([fromId, toId], index) => {
     const from = scene.starsById[fromId];
     const to = scene.starsById[toId];
     if (!from || !to) return;
 
     const pulse = 0.5 + ((Math.sin(time * 1.25 + index * 0.75) + 1) / 2) * 0.5;
+    const segmentProgress = clamp(routeAdvance - index);
+
     ctx.beginPath();
     ctx.moveTo(from.x, from.y);
     ctx.lineTo(to.x, to.y);
     ctx.strokeStyle = `rgba(255,223,150,${0.14 + pulse * 0.16})`;
     ctx.lineWidth = 1 + pulse * 0.5;
     ctx.stroke();
+
+    if (segmentProgress > 0) {
+      const activeX = lerp(from.x, to.x, segmentProgress);
+      const activeY = lerp(from.y, to.y, segmentProgress);
+
+      ctx.beginPath();
+      ctx.moveTo(from.x, from.y);
+      ctx.lineTo(activeX, activeY);
+      ctx.strokeStyle = `rgba(130,245,255,${0.18 + segmentProgress * 0.32})`;
+      ctx.lineWidth = 1.7;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(activeX, activeY, 2.4 + pulse * 1.2, 0, Math.PI * 2);
+      ctx.shadowBlur = 14;
+      ctx.shadowColor = 'rgba(0,229,255,0.72)';
+      ctx.fillStyle = `rgba(230,255,255,${0.42 + pulse * 0.36})`;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
   });
+}
+
+function drawScrollCinematic(ctx, scene, progress, time, width, height) {
+  const impactTarget = scene.starsById.jpmc ?? scene.starsById.pes;
+  if (!impactTarget) return;
+
+  const drop = clamp((progress - 0.02) / 0.18);
+  const impact = clamp((progress - 0.16) / 0.15);
+  const spill = clamp((progress - 0.24) / 0.18);
+
+  const startX = impactTarget.x - width * 0.025 + Math.sin(time * 1.8) * 10;
+  const startY = height * 0.04;
+  const targetX = impactTarget.x;
+  const targetY = impactTarget.y - 7;
+  const dropEase = easeInCubic(drop);
+  const capsuleX = lerp(startX, targetX, dropEase);
+  const capsuleY = lerp(startY, targetY, dropEase);
+
+  if (drop > 0 && drop < 1) {
+    const trailAlpha = 0.18 + drop * 0.32;
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(capsuleX, capsuleY - 14);
+    ctx.strokeStyle = `rgba(0,229,255,${trailAlpha})`;
+    ctx.lineWidth = 1.2 + drop * 1.2;
+    ctx.stroke();
+
+    ctx.translate(capsuleX, capsuleY);
+    ctx.rotate(0.18 + Math.sin(time * 3) * 0.08);
+    ctx.shadowBlur = 22;
+    ctx.shadowColor = 'rgba(0,229,255,0.8)';
+    ctx.fillStyle = `rgba(232,255,255,${0.55 + drop * 0.3})`;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 5, 16, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,223,150,0.7)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  if (impact > 0) {
+    for (let i = 0; i < 3; i++) {
+      const ring = clamp((impact - i * 0.14) / 0.74);
+      if (ring <= 0) continue;
+
+      ctx.beginPath();
+      ctx.arc(impactTarget.x, impactTarget.y, 12 + easeOutCubic(ring) * (70 + i * 18), 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(255,223,150,${(1 - ring) * 0.28})`;
+      ctx.lineWidth = 1.4;
+      ctx.stroke();
+    }
+  }
+
+  if (spill > 0) {
+    const splashCount = 12;
+    for (let i = 0; i < splashCount; i++) {
+      const angle = (Math.PI * 2 * i) / splashCount + time * 0.18;
+      const distance = easeOutCubic(spill) * (16 + i * 4.2);
+      const alpha = (1 - spill) * 0.24 + 0.08;
+      const x = impactTarget.x + Math.cos(angle) * distance;
+      const y = impactTarget.y + Math.sin(angle) * distance * 0.56;
+
+      ctx.beginPath();
+      ctx.arc(x, y, 1.2 + (i % 3) * 0.35, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(130,245,255,${alpha})`;
+      ctx.fill();
+    }
+  }
+}
+
+function drawScrollAtmosphere(ctx, scene, progress, time, width, height) {
+  const scannerX = width * (0.08 + progress * 0.84);
+  const scannerGradient = ctx.createLinearGradient(scannerX, 0, scannerX, height);
+  scannerGradient.addColorStop(0, 'rgba(0,229,255,0)');
+  scannerGradient.addColorStop(0.5, `rgba(0,229,255,${0.06 + progress * 0.08})`);
+  scannerGradient.addColorStop(1, 'rgba(0,229,255,0)');
+
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.beginPath();
+  ctx.moveTo(scannerX, 0);
+  ctx.lineTo(scannerX, height);
+  ctx.strokeStyle = scannerGradient;
+  ctx.lineWidth = 1.2;
+  ctx.stroke();
+
+  const wavePhase = clamp((progress - 0.18) / 0.34);
+  if (wavePhase > 0) {
+    for (let band = 0; band < 4; band++) {
+      const yBase = height * (0.2 + band * 0.17);
+      const amplitude = (18 + band * 5) * wavePhase;
+
+      ctx.beginPath();
+      for (let x = 0; x <= width; x += 24) {
+        const y =
+          yBase +
+          Math.sin(x * 0.012 + time * (1.2 + band * 0.18) + band) * amplitude +
+          Math.sin(progress * Math.PI * 4 + band) * 12;
+
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+
+      ctx.strokeStyle = `rgba(0,229,255,${(1 - Math.abs(wavePhase - 0.55)) * 0.1})`;
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    }
+  }
+
+  const meshPhase = clamp((progress - 0.42) / 0.32);
+  if (meshPhase > 0) {
+    const center = {
+      x: lerp(width * 0.34, width * 0.67, meshPhase),
+      y: lerp(height * 0.42, height * 0.5, meshPhase),
+    };
+
+    for (let ring = 0; ring < 5; ring++) {
+      const radius = 60 + ring * 44 + Math.sin(time * 0.9 + ring) * 8 + meshPhase * 40;
+      ctx.beginPath();
+      ctx.ellipse(center.x, center.y, radius * 1.5, radius * 0.58, -0.2, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(123,0,255,${meshPhase * (0.06 - ring * 0.006)})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  }
+
+  const terminalPhase = clamp((progress - 0.72) / 0.28);
+  if (terminalPhase > 0) {
+    const jpmc = scene.starsById.jpmc;
+    const nyc = scene.starsById.nyc;
+    const centerX = lerp(jpmc?.x ?? width * 0.75, nyc?.x ?? width * 0.38, terminalPhase);
+    const centerY = lerp(jpmc?.y ?? height * 0.35, nyc?.y ?? height * 0.32, terminalPhase);
+
+    for (let i = 0; i < 18; i++) {
+      const angle = time * 0.28 + i * 0.72;
+      const radius = 90 + i * 9 + terminalPhase * 70;
+      const x = centerX + Math.cos(angle) * radius * 1.4;
+      const y = centerY + Math.sin(angle) * radius * 0.48;
+
+      ctx.beginPath();
+      ctx.arc(x, y, 1.2 + (i % 4) * 0.35, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0,255,157,${terminalPhase * 0.12})`;
+      ctx.fill();
+    }
+  }
+
+  ctx.restore();
 }
 
 function drawLabels(ctx, scene, mouse, time) {
@@ -495,7 +699,7 @@ function drawLabels(ctx, scene, mouse, time) {
 
 export default function ParticleCanvas() {
   const canvasRef = useRef(null);
-  const stateRef = useRef({ mouse: { x: -9999, y: -9999 }, animId: null });
+  const stateRef = useRef({ mouse: { x: -9999, y: -9999 }, animId: null, scrollProgress: 0 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -519,14 +723,27 @@ export default function ParticleCanvas() {
       stateRef.current.mouse = { x: event.clientX, y: event.clientY };
     };
 
+    const onScroll = () => {
+      const hero = canvas.parentElement;
+      const rect = hero?.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || 1;
+      const scrollRange = Math.max(viewportHeight * 0.75, (rect?.height ?? viewportHeight) - viewportHeight * 0.15);
+
+      stateRef.current.scrollProgress = rect ? clamp(-rect.top / scrollRange) : 0;
+    };
+
     window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const time = performance.now() * 0.001;
-      const { mouse } = stateRef.current;
+      const { mouse, scrollProgress } = stateRef.current;
       const { stars } = scene;
+
+      drawScrollAtmosphere(ctx, scene, scrollProgress, time, canvas.width, canvas.height);
 
       for (const star of stars) {
         const targetX = star.homeX + Math.sin(time * star.orbitSpeed + star.orbitOffset) * star.driftRadiusX;
@@ -587,7 +804,7 @@ export default function ParticleCanvas() {
         }
       }
 
-      drawRoutes(ctx, scene, time);
+      drawRoutes(ctx, scene, time, scrollProgress);
 
       for (const star of stars) {
         const twinkle = 0.72 + ((Math.sin(time * star.twinkleSpeed + star.twinkleOffset) + 1) / 2) * 0.6;
@@ -602,6 +819,7 @@ export default function ParticleCanvas() {
       }
 
       ctx.shadowBlur = 0;
+      drawScrollCinematic(ctx, scene, scrollProgress, time, canvas.width, canvas.height);
       drawLabels(ctx, scene, mouse, time);
       stateRef.current.animId = requestAnimationFrame(draw);
     };
@@ -612,8 +830,15 @@ export default function ParticleCanvas() {
       cancelAnimationFrame(stateRef.current.animId);
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('scroll', onScroll);
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" style={{ opacity: 0.8 }} />;
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 h-screen w-screen pointer-events-none"
+      style={{ opacity: 0.82, zIndex: 0 }}
+    />
+  );
 }

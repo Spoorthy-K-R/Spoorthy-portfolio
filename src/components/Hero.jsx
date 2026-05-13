@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import ParticleCanvas from './ParticleCanvas';
 import data from '../data/portfolio.json';
 
 // Typewriter hook
@@ -39,9 +38,6 @@ export default function Hero() {
       id="hero"
       className="relative min-h-screen flex items-center justify-start overflow-hidden"
     >
-      {/* Particle background */}
-      <ParticleCanvas />
-
       {/* Radial gradient blobs */}
       <div
         className="absolute pointer-events-none"
