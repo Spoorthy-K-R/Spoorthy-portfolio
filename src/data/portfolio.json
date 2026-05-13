@@ -1,0 +1,152 @@
+{
+  "personal": {
+    "name": "Spoorthy K.R.",
+    "fullName": "Spoorthy Kumbashi Raghavendra",
+    "role": "ML Engineer & Full-Stack Developer",
+    "tagline": "Architecting intelligent systems — from neural signal detection to billion-dollar trade pipelines.",
+    "email": "spoorthy.kr@tamu.edu",
+    "github": "https://github.com/Spoorthy-K-R",
+    "linkedin": "https://linkedin.com/in/spoorthy-k-r/",
+    "location": "College Station, TX",
+    "status": "MS CS @ Texas A&M · GPA 4.0"
+  },
+
+  "education": [
+    {
+      "school": "Texas A&M University",
+      "degree": "Master's in Computer Science",
+      "period": "Aug 2025 – May 2027",
+      "gpa": "4.0 / 4.0",
+      "courses": ["Deep Learning", "NLP", "Analysis of Algorithms"]
+    },
+    {
+      "school": "PES University",
+      "degree": "B.Tech — Electronics & Communication Engineering",
+      "period": "Aug 2019 – May 2023",
+      "gpa": "9.68 / 10",
+      "highlight": "Gold Medalist",
+      "courses": ["Data Structures", "Machine Learning", "AI", "Wireless Networks"]
+    }
+  ],
+
+  "experience": [
+    {
+      "company": "JP Morgan Chase & Co.",
+      "role": "Software Engineer I",
+      "period": "June 2023 – July 2025",
+      "location": "Bengaluru, India",
+      "color": "#00e5ff",
+      "highlights": [
+        "Designed Spring Boot microservices replacing a 40-year-old mainframe processing 250–300k daily FX trades worth $10–15B",
+        "Converted REST APIs to GraphQL reducing frontend load time by ~100ms",
+        "Migrated Oracle databases to secure cloud with minimal downtime",
+        "Built Python automation tools saving the QA team 7–8 hours weekly",
+        "Raised SonarQube security score from 65% to 80%+ and embedded it in CI/CD"
+      ]
+    },
+    {
+      "company": "JP Morgan Chase & Co.",
+      "role": "Software Engineering Intern",
+      "period": "Feb 2023 – May 2023",
+      "location": "Bengaluru, India",
+      "color": "#00b8d4",
+      "highlights": [
+        "Led end-to-end development of a real-time Kubernetes microservices monitoring platform",
+        "Implemented dynamic pod scaling, live log streaming, and health monitoring",
+        "Cut resolution time by 40% with real-time failure alerts"
+      ]
+    },
+    {
+      "company": "BGSW (Bosch)",
+      "role": "Machine Learning Project Trainee",
+      "period": "June 2022 – July 2022",
+      "location": "Bengaluru, India",
+      "color": "#7b00ff",
+      "highlights": [
+        "Built NLP preprocessing pipeline with spaCy/NLTK for symbolic report parsing",
+        "Trained Random Forest & SVM models achieving 85%+ accuracy on EV testing data",
+        "Reduced manual test instruction effort by 60%"
+      ]
+    }
+  ],
+
+  "projects": [
+    {
+      "id": 1,
+      "title": "Signal Detection in RSMA",
+      "subtitle": "IEEE NCC 2023 — Lead Author",
+      "description": "LSTM-based signal detection for beyond-5G networks using Rate-Splitting Multiple Access. Outperforms conventional algorithms in noisy, multi-user channels using temporal sequence modeling to minimize bit error rates.",
+      "tech": ["LSTM", "TensorFlow", "Python", "Signal Processing", "5G", "RSMA"],
+      "accent": "#00e5ff",
+      "type": "Research",
+      "year": "2023",
+      "link": null
+    },
+    {
+      "id": 2,
+      "title": "Radiogenomic Brain Tumor Classification",
+      "subtitle": "IEEE INDICON 2022 — Lead Author",
+      "description": "Transfer learning with ResNet & AlexNet to predict IDH genetic biomarker status from MRI scans, enabling chemotherapy response prediction. Achieved 82% accuracy on the RSNA-MICCAI dataset via 3D slice extraction and advanced augmentation.",
+      "tech": ["ResNet", "AlexNet", "Keras", "Medical Imaging", "Transfer Learning", "Python"],
+      "accent": "#ff006e",
+      "type": "Research",
+      "year": "2022",
+      "link": null
+    },
+    {
+      "id": 3,
+      "title": "LLM Financial Filings Analyzer",
+      "subtitle": "RAG Pipeline · Personal Project",
+      "description": "LLM-powered Retrieval-Augmented Generation pipeline that parses SEC 10-K filings, extracts key financial metrics, and indexes them in a vector knowledge base — generating investment-grade portfolio analysis and multi-year comparisons.",
+      "tech": ["LLM", "RAG", "Python", "Vector DB", "SEC API", "Finance"],
+      "accent": "#7b00ff",
+      "type": "AI/ML",
+      "year": "2024",
+      "link": null
+    },
+    {
+      "id": 4,
+      "title": "Kubernetes Monitoring Platform",
+      "subtitle": "JP Morgan Chase · Production System",
+      "description": "Real-time microservices monitoring platform with React frontend and Spring Boot backend. Dynamic pod scaling, live log streaming, and granular trade tracking cut incident resolution time by 40% for the support team.",
+      "tech": ["React", "Spring Boot", "Kubernetes", "Docker", "Java", "Kafka"],
+      "accent": "#00ff9d",
+      "type": "Full Stack",
+      "year": "2023",
+      "link": null
+    },
+    {
+      "id": 5,
+      "title": "NLP Topic Summarizer",
+      "subtitle": "Multi-source Summarization Platform",
+      "description": "BART transformer-powered platform that scrapes raw web content via BeautifulSoup, then generates coherent multi-source topic overviews using abstractive summarization. Deployed with an interactive Flask frontend.",
+      "tech": ["BART", "NLP", "Flask", "Python", "BeautifulSoup", "Transformers"],
+      "accent": "#ffaa00",
+      "type": "NLP",
+      "year": "2022",
+      "link": null
+    }
+  ],
+
+  "skills": {
+    "Languages": ["Python", "Java", "C", "SQL", "JavaScript", "MATLAB"],
+    "Frontend": ["React", "HTML", "CSS", "Tailwind CSS"],
+    "Backend & APIs": ["Spring Boot", "Flask", "Django", "GraphQL", "Kafka", "REST"],
+    "ML & AI": ["TensorFlow", "Keras", "PyTorch", "LSTM", "BART", "RAG", "spaCy", "NLTK", "scikit-learn"],
+    "DevOps & Cloud": ["Docker", "Kubernetes", "Jenkins", "Git", "Maven", "CI/CD"],
+    "Databases": ["Oracle DB", "SQL", "Vector DB", "IntelliJ", "JUnit"]
+  },
+
+  "publications": [
+    {
+      "title": "A Two-Tier Deep Neural Network Detector for Two-User Rate-Splitting Multiple Access Systems",
+      "venue": "IEEE NCC 2023, Guwahati, India",
+      "doi": "10068068"
+    },
+    {
+      "title": "Deep Learning Approach for Radiogenomic Classification of Brain Tumor",
+      "venue": "IEEE INDICON 2022, Kochi, India",
+      "doi": "10039760"
+    }
+  ]
+}
