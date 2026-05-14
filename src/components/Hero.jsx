@@ -95,7 +95,7 @@ export default function Hero() {
           className="glitch font-display leading-none mb-2"
           data-text={personal.fullName.toUpperCase()}
           style={{
-            fontSize: 'clamp(3rem, 10vw, 9rem)',
+            fontSize: 'clamp(2.6rem, 8.6vw, 7.8rem)',
             letterSpacing: '0.04em',
             color: '#f0f0f0',
             opacity: mounted ? 1 : 0,
@@ -160,6 +160,14 @@ export default function Hero() {
           <button className="btn-secondary" onClick={() => scrollTo('#contact')}>
             Get in Touch
           </button>
+          <a
+            href={personal.resume}
+            download="Spoorthy-KR-Resume.pdf"
+            className="btn-secondary"
+            aria-label="Download Spoorthy K.R. resume"
+          >
+            Download Resume
+          </a>
         </div>
 
         {/* Stats row */}

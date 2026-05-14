@@ -9,6 +9,7 @@ const NAV_LINKS = [
 ];
 
 export default function Navbar() {
+  const { personal } = data;
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -60,15 +61,17 @@ export default function Navbar() {
               </a>
             </li>
           ))}
+          <li>
+            <a
+              href={personal.resume}
+              download="Spoorthy-KR-Resume.pdf"
+              className="nav-link"
+              aria-label="Download Spoorthy K.R. resume"
+            >
+              Resume
+            </a>
+          </li>
         </ul>
-
-        {/* CTA */}
-        <a
-          href={`mailto:${data.personal.email}`}
-          className="hidden md:block btn-secondary text-xs"
-        >
-          Hire Me
-        </a>
 
         {/* Mobile hamburger */}
         <button
@@ -120,11 +123,14 @@ export default function Navbar() {
           ))}
           <li>
             <a
-              href={`mailto:${data.personal.email}`}
+              href={personal.resume}
+              download="Spoorthy-KR-Resume.pdf"
               className="nav-link text-sm"
+              onClick={() => setMenuOpen(false)}
               style={{ color: 'var(--cyan)' }}
+              aria-label="Download Spoorthy K.R. resume"
             >
-              Hire Me →
+              Download Resume
             </a>
           </li>
         </ul>

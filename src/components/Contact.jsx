@@ -78,10 +78,8 @@ export default function Contact() {
           >
             LET'S{' '}
             <span className="glow-text" style={{ color: 'var(--cyan)' }}>
-              BUILD
+              CONNECT
             </span>
-            <br />
-            SOMETHING.
           </h2>
           <p
             className="font-body text-base max-w-md mx-auto mb-10"

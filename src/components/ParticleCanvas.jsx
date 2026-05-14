@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 
+const INTRO_DURATION = 2200;
+
 const MAP_FRAME = {
   left: 0.2,
   top: 0.1,
@@ -47,7 +49,7 @@ const LANDMARKS = [
   },
   {
     id: 'pes',
-    label: 'PES',
+    label: 'PES Bangalore',
     lng: 77.53,
     lat: 12.94,
     radius: 3.2,
@@ -62,7 +64,7 @@ const LANDMARKS = [
   },
   {
     id: 'jpmc',
-    label: 'JPMC',
+    label: 'JPMC Bangalore',
     lng: 77.63,
     lat: 13.01,
     radius: 3.9,
@@ -315,6 +317,59 @@ function lerp(from, to, amount) {
   return from + (to - from) * amount;
 }
 
+function easeInOutCubic(value) {
+  return value < 0.5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2;
+}
+
+function createGenericIntroPoints(count, width, height) {
+  const rand = createSeededRandom(8181);
+  const centerX = width < 900 ? width * 0.61 : width * 0.73;
+  const centerY = height * 0.58;
+  const bandWidth = Math.min(width * 0.54, 650);
+  const bandHeight = Math.min(height * 0.36, 290);
+  const points = [];
+
+  for (let i = 0; i < count; i++) {
+    const t = i / Math.max(1, count - 1);
+    const lane = (i % 7) - 3;
+    const angle = rand() * Math.PI * 2;
+    const spread = Math.sqrt(rand());
+    const wave = Math.sin(t * Math.PI * 7 + lane * 0.6);
+    const x = centerX + (t - 0.5) * bandWidth + Math.cos(angle) * spread * bandWidth * 0.16 + wave * 16;
+    const y =
+      centerY +
+      lane * bandHeight * 0.065 +
+      Math.sin(angle) * spread * bandHeight * 0.28 +
+      Math.sin(t * Math.PI * 4) * 18;
+
+    points.push({
+      x,
+      y,
+      weight: 4 + (1 - Math.abs(t - 0.5) * 2) * 7,
+      phase: rand() * Math.PI * 2,
+      driftX: rand() * 4 + 2,
+      driftY: rand() * 3 + 2,
+    });
+  }
+
+  return points;
+}
+
+function assignIntroTargets(scene, width, height) {
+  const introPoints = createGenericIntroPoints(scene.stars.length, width, height);
+
+  scene.stars.forEach((star, index) => {
+    const point = introPoints[index % introPoints.length];
+    star.introX = point.x;
+    star.introY = point.y;
+    star.introWeight = point.weight ?? 1;
+    star.introPhase = point.phase ?? 0;
+    star.introDriftX = point.driftX ?? 3;
+    star.introDriftY = point.driftY ?? 2;
+    star.introGlow = index % 6 === 0 || star.introWeight > 9;
+  });
+}
+
 function samplePath(points, stepDegrees = 6) {
   const sampled = [];
 
@@ -466,7 +521,9 @@ function buildScene(width, height) {
     starsById[star.id] = star;
   });
 
-  return { stars, starsById };
+  const scene = { stars, starsById };
+  assignIntroTargets(scene, width, height);
+  return scene;
 }
 
 function drawRoutes(ctx, scene, time, scrollProgress) {
@@ -697,9 +754,31 @@ function drawLabels(ctx, scene, mouse, time) {
   ctx.restore();
 }
 
+function getIntroTarget(star, time, introProgress) {
+  const mapX = star.homeX + Math.sin(time * star.orbitSpeed + star.orbitOffset) * star.driftRadiusX;
+  const mapY = star.homeY + Math.cos(time * (star.orbitSpeed * 0.92) + star.orbitOffset) * star.driftRadiusY;
+  const introX = star.introX + Math.sin(time * 0.7 + star.introPhase) * star.introDriftX;
+  const introY = star.introY + Math.cos(time * 0.6 + star.introPhase) * star.introDriftY;
+
+  if (introProgress < 0.34) {
+    return { x: introX, y: introY };
+  }
+
+  const mapBlend = easeInOutCubic((introProgress - 0.34) / 0.66);
+  return {
+    x: lerp(introX, mapX, mapBlend),
+    y: lerp(introY, mapY, mapBlend),
+  };
+}
+
 export default function ParticleCanvas() {
   const canvasRef = useRef(null);
-  const stateRef = useRef({ mouse: { x: -9999, y: -9999 }, animId: null, scrollProgress: 0 });
+  const stateRef = useRef({
+    mouse: { x: -9999, y: -9999 },
+    animId: null,
+    scrollProgress: 0,
+    introStart: null,
+  });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -709,11 +788,13 @@ export default function ParticleCanvas() {
     if (!ctx) return;
 
     let scene = buildScene(window.innerWidth, window.innerHeight);
+    stateRef.current.introStart = performance.now();
 
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       scene = buildScene(canvas.width, canvas.height);
+      assignIntroTargets(scene, canvas.width, canvas.height);
     };
 
     resize();
@@ -740,87 +821,124 @@ export default function ParticleCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const time = performance.now() * 0.001;
+      const introProgress = clamp((performance.now() - stateRef.current.introStart) / INTRO_DURATION);
+      const introDone = introProgress >= 1;
+      const isMorphingToMap = !introDone && introProgress >= 0.34;
       const { mouse, scrollProgress } = stateRef.current;
       const { stars } = scene;
 
-      drawScrollAtmosphere(ctx, scene, scrollProgress, time, canvas.width, canvas.height);
+      if (introDone) {
+        drawScrollAtmosphere(ctx, scene, scrollProgress, time, canvas.width, canvas.height);
+      }
 
       for (const star of stars) {
-        const targetX = star.homeX + Math.sin(time * star.orbitSpeed + star.orbitOffset) * star.driftRadiusX;
-        const targetY =
-          star.homeY + Math.cos(time * (star.orbitSpeed * 0.92) + star.orbitOffset) * star.driftRadiusY;
+        const target = introDone
+          ? {
+              x: star.homeX + Math.sin(time * star.orbitSpeed + star.orbitOffset) * star.driftRadiusX,
+              y: star.homeY + Math.cos(time * (star.orbitSpeed * 0.92) + star.orbitOffset) * star.driftRadiusY,
+            }
+          : getIntroTarget(star, time, introProgress);
 
         const dx = star.x - mouse.x;
         const dy = star.y - mouse.y;
         const distance = Math.hypot(dx, dy);
-        if (distance < 110 && distance > 0) {
+        if (introDone && distance < 110 && distance > 0) {
           const force = ((110 - distance) / 110) * 0.55;
           star.vx += (dx / distance) * force;
           star.vy += (dy / distance) * force;
         }
 
-        star.vx += (targetX - star.x) * star.spring;
-        star.vy += (targetY - star.y) * star.spring;
-        star.vx *= 0.95;
-        star.vy *= 0.95;
-        star.x += star.vx;
-        star.y += star.vy;
+        if (introDone) {
+          star.vx += (target.x - star.x) * star.spring;
+          star.vy += (target.y - star.y) * star.spring;
+          star.vx *= 0.95;
+          star.vy *= 0.95;
+          star.x += star.vx;
+          star.y += star.vy;
+        } else {
+          const snap = isMorphingToMap ? 0.32 : 0.22;
+          star.x = lerp(star.x, target.x, snap);
+          star.y = lerp(star.y, target.y, snap);
+          star.vx = 0;
+          star.vy = 0;
+        }
       }
 
-      for (let i = 0; i < stars.length; i++) {
-        for (let j = i + 1; j < stars.length; j++) {
+      if (introDone || introProgress < 0.32) {
+        for (let i = 0; i < stars.length; i++) {
+          for (let j = i + 1; j < stars.length; j++) {
           const a = stars[i];
           const b = stars[j];
 
           const homeDistance = Math.hypot(a.homeX - b.homeX, a.homeY - b.homeY);
-          const connectionDistance =
-            a.type === 'ambient' || b.type === 'ambient'
+          const connectionDistance = introDone
+            ? a.type === 'ambient' || b.type === 'ambient'
               ? 60
               : a.type === 'anchor' || b.type === 'anchor' || a.type === 'relay' || b.type === 'relay'
                 ? 88
                 : a.type === 'outline' || b.type === 'outline'
                   ? 54
-                  : 66;
+                  : 66
+            : 44;
 
-          if (homeDistance > connectionDistance) continue;
+          if (introDone && homeDistance > connectionDistance) continue;
 
           const currentDistance = Math.hypot(a.x - b.x, a.y - b.y);
           if (currentDistance > connectionDistance) continue;
 
-          const opacity =
-            (1 - currentDistance / connectionDistance) *
-            (a.type === 'ambient' || b.type === 'ambient'
-              ? 0.08
-              : a.type === 'outline' || b.type === 'outline'
-                ? 0.14
-                : 0.11);
+          const opacity = introDone
+            ? (1 - currentDistance / connectionDistance) *
+              (a.type === 'ambient' || b.type === 'ambient'
+                ? 0.08
+                : a.type === 'outline' || b.type === 'outline'
+                  ? 0.14
+                  : 0.11)
+            : (1 - currentDistance / connectionDistance) * 0.13;
 
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
           ctx.lineTo(b.x, b.y);
-          ctx.strokeStyle = `rgba(0,229,255,${opacity})`;
+          ctx.strokeStyle = `rgba(0,229,255,${introDone ? opacity : opacity * 1.6})`;
           ctx.lineWidth = a.type === 'anchor' || b.type === 'anchor' ? 0.9 : 0.6;
           ctx.stroke();
+          }
         }
       }
 
-      drawRoutes(ctx, scene, time, scrollProgress);
+      if (introDone) {
+        drawRoutes(ctx, scene, time, scrollProgress);
+      }
 
       for (const star of stars) {
         const twinkle = 0.72 + ((Math.sin(time * star.twinkleSpeed + star.twinkleOffset) + 1) / 2) * 0.6;
-        const alpha = Math.min(1, star.alpha * twinkle);
+        const introFade = introDone ? 0 : 1 - easeInOutCubic(clamp((introProgress - 0.34) / 0.66));
+        const introIntensity = clamp((star.introWeight ?? 1) / 12);
+        const glowBoost = introFade * introIntensity;
+        const introColor = 'rgba(130,245,255,1)';
+        const drawColor = introFade > 0.05 ? introColor : star.color;
+        const alpha = Math.min(1, star.alpha * twinkle * (1 - introFade * 0.15) + glowBoost * 0.34);
+        const radius = star.r + glowBoost * 0.58;
+        const useGlow = introDone
+          ? star.type === 'anchor' || star.type === 'relay' || star.r > 1.05
+          : star.introGlow && introProgress < 0.34;
 
         ctx.beginPath();
-        ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
-        ctx.shadowBlur = star.glow;
-        ctx.shadowColor = withAlpha(star.color, star.type === 'anchor' ? 0.72 : 0.55);
-        ctx.fillStyle = withAlpha(star.color, alpha);
+        ctx.arc(star.x, star.y, radius, 0, Math.PI * 2);
+        ctx.shadowBlur = useGlow ? star.glow + glowBoost * 4 : 0;
+        ctx.shadowColor = useGlow
+          ? introFade > 0.05
+            ? withAlpha(introColor, 0.56 + glowBoost * 0.2)
+            : withAlpha(star.color, star.type === 'anchor' ? 0.72 : 0.55)
+          : 'transparent';
+        ctx.fillStyle = withAlpha(drawColor, alpha);
         ctx.fill();
       }
 
       ctx.shadowBlur = 0;
-      drawScrollCinematic(ctx, scene, scrollProgress, time, canvas.width, canvas.height);
-      drawLabels(ctx, scene, mouse, time);
+      if (introDone) {
+        drawScrollCinematic(ctx, scene, scrollProgress, time, canvas.width, canvas.height);
+        drawLabels(ctx, scene, mouse, time);
+      }
       stateRef.current.animId = requestAnimationFrame(draw);
     };
 
