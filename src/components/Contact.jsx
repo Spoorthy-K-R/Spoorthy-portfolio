@@ -64,9 +64,9 @@ export default function Contact() {
         }}
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10 py-24">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10 py-16 md:py-20">
         {/* CTA Block */}
-        <div className="text-center mb-20 reveal">
+        <div className="text-center mb-12 reveal">
           <p className="section-label mb-6">// 04 — Let's Connect</p>
           <h2
             className="font-display mb-6"

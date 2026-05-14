@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import data from '../data/portfolio.json';
 
 const NAV_LINKS = [
+  { label: 'Education', href: '#education' },
+  { label: 'Experience', href: '#experience' },
   { label: 'Projects', href: '#projects' },
   { label: 'Skills', href: '#skills' },
-  { label: 'Experience', href: '#experience' },
   { label: 'Contact', href: '#contact' },
 ];
 

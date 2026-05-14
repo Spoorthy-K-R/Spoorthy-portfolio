@@ -198,27 +198,6 @@ export default function Hero() {
           ))}
         </div>
       </div>
-
-      {/* Scroll hint */}
-      <div
-        className="absolute bottom-8 left-1/2 flex flex-col items-center gap-2"
-        style={{
-          transform: 'translateX(-50%)',
-          opacity: mounted ? 0.5 : 0,
-          transition: 'opacity 1s ease 2.2s',
-        }}
-      >
-        <span className="font-mono text-xs tracking-widest" style={{ color: 'var(--muted)' }}>
-          SCROLL
-        </span>
-        <div
-          className="w-px h-12"
-          style={{
-            background: 'linear-gradient(to bottom, var(--cyan), transparent)',
-            animation: 'fadeIn 2s ease infinite alternate',
-          }}
-        />
-      </div>
     </section>
   );
 }

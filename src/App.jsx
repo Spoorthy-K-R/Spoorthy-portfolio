@@ -3,7 +3,8 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import ParticleCanvas from './components/ParticleCanvas';
 import Projects from './components/Projects';
-import Skills from './components/Skills';
+import Skills, { SkillsMarquee } from './components/Skills';
+import Education from './components/Education';
 import Experience from './components/Experience';
 import Contact from './components/Contact';
 
@@ -33,9 +34,11 @@ export default function App() {
       <Navbar />
       <main className="relative z-10">
         <Hero />
+        <Education />
+        <SkillsMarquee />
+        <Experience />
         <Projects />
         <Skills />
-        <Experience />
         <Contact />
       </main>
     </div>

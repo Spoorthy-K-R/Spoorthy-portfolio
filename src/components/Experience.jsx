@@ -93,9 +93,9 @@ function ExperienceCard({ job, index }) {
 
 export default function Experience() {
   return (
-    <section id="experience" className="py-32 px-6 md:px-10 max-w-7xl mx-auto">
+    <section id="experience" className="pt-20 md:pt-24 pb-8 md:pb-10 px-6 md:px-10 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="reveal mb-16">
+      <div className="reveal mb-10">
         <p className="section-label mb-4">// 03 — Work History</p>
         <div className="flex items-end justify-between flex-wrap gap-4">
           <h2
@@ -108,63 +108,6 @@ export default function Experience() {
         <hr className="hr-cyber mt-6" />
       </div>
 
-      {/* Education cards */}
-      <div className="mb-12">
-        <p className="section-label mb-6 reveal" style={{ opacity: 0.7 }}>— Education</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-16">
-          {data.education.map((edu, i) => (
-            <div
-              key={i}
-              className="glass glass-hover reveal rounded-sm p-6"
-              style={{
-                transitionDelay: `${i * 0.1}s`,
-                borderTop: `2px solid ${i === 0 ? 'var(--cyan)' : '#00ff9d'}30`,
-              }}
-            >
-              <div className="flex items-start justify-between mb-3 flex-wrap gap-2">
-                <h3 className="font-mono text-xs tracking-wider" style={{ color: i === 0 ? 'var(--cyan)' : '#00ff9d' }}>
-                  {edu.school}
-                </h3>
-                {edu.highlight && (
-                  <span
-                    className="font-mono text-xs px-2 py-0.5 rounded-sm"
-                    style={{
-                      background: '#ffaa0015',
-                      border: '1px solid #ffaa0040',
-                      color: '#ffaa00',
-                    }}
-                  >
-                    🏆 {edu.highlight}
-                  </span>
-                )}
-              </div>
-              <p className="font-body text-base font-medium mb-1" style={{ color: '#ddd' }}>
-                {edu.degree}
-              </p>
-              <p className="font-mono text-xs mb-3" style={{ color: 'rgba(255,255,255,0.3)' }}>
-                {edu.period}
-              </p>
-              <div className="flex items-center gap-4">
-                <span
-                  className="font-display text-2xl"
-                  style={{ color: i === 0 ? 'var(--cyan)' : '#00ff9d', letterSpacing: '0.05em' }}
-                >
-                  {edu.gpa}
-                </span>
-                <span className="font-mono text-xs" style={{ color: 'var(--muted)' }}>GPA</span>
-              </div>
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {edu.courses.map(c => (
-                  <span key={c} className="tag" style={{ fontSize: '0.6rem' }}>{c}</span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Work experience */}
-      <p className="section-label mb-6 reveal" style={{ opacity: 0.7 }}>— Industry</p>
       <div className="space-y-6">
         {data.experience.map((job, i) => (
           <ExperienceCard key={i} job={job} index={i} />

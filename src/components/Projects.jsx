@@ -224,15 +224,52 @@ function ProjectCard({ project, index }) {
   );
 }
 
+function Publications() {
+  return (
+    <div className="mt-12">
+      <p className="section-label mb-8 reveal">// Publications</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {data.publications.map((pub, i) => (
+          <div
+            key={i}
+            className="glass glass-hover reveal p-5 rounded-sm"
+            style={{ transitionDelay: `${i * 0.1}s` }}
+          >
+            <div className="flex items-start gap-4">
+              <span
+                className="font-display text-3xl mt-1 flex-shrink-0"
+                style={{ color: 'var(--cyan)', opacity: 0.4 }}
+              >
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div>
+                <p className="font-body text-sm leading-relaxed mb-2" style={{ color: '#ccc' }}>
+                  {pub.title}
+                </p>
+                <p className="font-mono text-xs" style={{ color: 'var(--cyan)', opacity: 0.7 }}>
+                  {pub.venue}
+                </p>
+                <p className="font-mono text-xs mt-1" style={{ color: 'rgba(255,255,255,0.25)' }}>
+                  DOI: {pub.doi}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Projects() {
   const { projects } = data;
   const featured = projects[0];
   const rest = projects.slice(1);
 
   return (
-    <section id="projects" className="py-32 px-6 md:px-10 max-w-7xl mx-auto">
+    <section id="projects" className="pt-8 md:pt-10 pb-8 md:pb-10 px-6 md:px-10 max-w-7xl mx-auto">
       {/* Section header */}
-      <div className="reveal mb-16">
+      <div className="reveal mb-10">
         <p className="section-label mb-4">// 01 — Selected Work</p>
         <div className="flex items-end justify-between flex-wrap gap-4">
           <h2
@@ -314,6 +351,8 @@ export default function Projects() {
           <ProjectCard key={project.id} project={project} index={i} />
         ))}
       </div>
+
+      <Publications />
     </section>
   );
 }
