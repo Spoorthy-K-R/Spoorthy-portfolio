@@ -1,9 +1,13 @@
 import { useEffect, useRef } from 'react';
 
 const INTRO_DURATION = 2200;
+const MAP_STAR_ALPHA_SCALE = 0.68;
+const MAP_STAR_GLOW_SCALE = 0.55;
+const MAP_CONNECTION_ALPHA_SCALE = 0.6;
+const MAP_ROUTE_ALPHA_SCALE = 0.72;
 
 const MAP_FRAME = {
-  left: 0.2,
+  left: 0.16,
   top: 0.1,
   width: 0.74,
   height: 0.68,
@@ -540,7 +544,7 @@ function drawRoutes(ctx, scene, time, scrollProgress) {
     ctx.beginPath();
     ctx.moveTo(from.x, from.y);
     ctx.lineTo(to.x, to.y);
-    ctx.strokeStyle = `rgba(255,223,150,${0.14 + pulse * 0.16})`;
+    ctx.strokeStyle = `rgba(255,223,150,${(0.14 + pulse * 0.16) * MAP_ROUTE_ALPHA_SCALE})`;
     ctx.lineWidth = 1 + pulse * 0.5;
     ctx.stroke();
 
@@ -551,7 +555,7 @@ function drawRoutes(ctx, scene, time, scrollProgress) {
       ctx.beginPath();
       ctx.moveTo(from.x, from.y);
       ctx.lineTo(activeX, activeY);
-      ctx.strokeStyle = `rgba(130,245,255,${0.18 + segmentProgress * 0.32})`;
+      ctx.strokeStyle = `rgba(130,245,255,${(0.18 + segmentProgress * 0.32) * MAP_ROUTE_ALPHA_SCALE})`;
       ctx.lineWidth = 1.7;
       ctx.stroke();
 
@@ -559,7 +563,7 @@ function drawRoutes(ctx, scene, time, scrollProgress) {
       ctx.arc(activeX, activeY, 2.4 + pulse * 1.2, 0, Math.PI * 2);
       ctx.shadowBlur = 14;
       ctx.shadowColor = 'rgba(0,229,255,0.72)';
-      ctx.fillStyle = `rgba(230,255,255,${0.42 + pulse * 0.36})`;
+      ctx.fillStyle = `rgba(230,255,255,${(0.42 + pulse * 0.36) * MAP_ROUTE_ALPHA_SCALE})`;
       ctx.fill();
       ctx.shadowBlur = 0;
     }
@@ -898,7 +902,7 @@ export default function ParticleCanvas() {
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
           ctx.lineTo(b.x, b.y);
-          ctx.strokeStyle = `rgba(0,229,255,${introDone ? opacity : opacity * 1.6})`;
+          ctx.strokeStyle = `rgba(0,229,255,${introDone ? opacity * MAP_CONNECTION_ALPHA_SCALE : opacity * 1.6})`;
           ctx.lineWidth = a.type === 'anchor' || b.type === 'anchor' ? 0.9 : 0.6;
           ctx.stroke();
           }
@@ -916,7 +920,8 @@ export default function ParticleCanvas() {
         const glowBoost = introFade * introIntensity;
         const introColor = 'rgba(130,245,255,1)';
         const drawColor = introFade > 0.05 ? introColor : star.color;
-        const alpha = Math.min(1, star.alpha * twinkle * (1 - introFade * 0.15) + glowBoost * 0.34);
+        const mapAlphaScale = introDone ? MAP_STAR_ALPHA_SCALE : 1;
+        const alpha = Math.min(1, (star.alpha * twinkle * (1 - introFade * 0.15) + glowBoost * 0.34) * mapAlphaScale);
         const radius = star.r + glowBoost * 0.58;
         const useGlow = introDone
           ? star.type === 'anchor' || star.type === 'relay' || star.r > 1.05
@@ -924,11 +929,11 @@ export default function ParticleCanvas() {
 
         ctx.beginPath();
         ctx.arc(star.x, star.y, radius, 0, Math.PI * 2);
-        ctx.shadowBlur = useGlow ? star.glow + glowBoost * 4 : 0;
+        ctx.shadowBlur = useGlow ? (star.glow + glowBoost * 4) * (introDone ? MAP_STAR_GLOW_SCALE : 1) : 0;
         ctx.shadowColor = useGlow
           ? introFade > 0.05
             ? withAlpha(introColor, 0.56 + glowBoost * 0.2)
-            : withAlpha(star.color, star.type === 'anchor' ? 0.72 : 0.55)
+            : withAlpha(star.color, (star.type === 'anchor' ? 0.72 : 0.55) * MAP_STAR_GLOW_SCALE)
           : 'transparent';
         ctx.fillStyle = withAlpha(drawColor, alpha);
         ctx.fill();

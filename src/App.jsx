@@ -7,6 +7,7 @@ import Skills, { SkillsMarquee } from './components/Skills';
 import Education from './components/Education';
 import Experience from './components/Experience';
 import Contact from './components/Contact';
+import SideBars from './components/SideBars';
 
 export default function App() {
   // Reveal-on-scroll observer
@@ -32,6 +33,7 @@ export default function App() {
     <div className="scanlines noise bg-dark text-white min-h-screen font-body relative">
       <ParticleCanvas />
       <Navbar />
+      <SideBars />
       <main className="relative z-10">
         <Hero />
         <Education />

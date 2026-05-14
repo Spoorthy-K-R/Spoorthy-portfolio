@@ -267,6 +267,96 @@ body {
   width: 100%;
 }
 
+/* ─── Fixed Side Rails ───────────────────────────────────────── */
+.side-rail {
+  position: fixed;
+  bottom: 0;
+  z-index: 45;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  pointer-events: none;
+}
+
+.side-rail-left {
+  left: 32px;
+  animation: sideRailInLeft 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.6s both;
+}
+
+.side-rail-right {
+  right: 32px;
+  animation: sideRailInRight 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.7s both;
+}
+
+.side-rail::after {
+  content: '';
+  width: 1px;
+  height: 220px;
+  margin-top: 2px;
+  background: linear-gradient(to bottom, rgba(0, 229, 255, 0.85), rgba(0, 229, 255, 0));
+  box-shadow: 0 0 18px rgba(0, 229, 255, 0.35);
+}
+
+.side-rail a {
+  pointer-events: auto;
+  color: rgba(240, 240, 240, 0.48);
+  transition: color 0.25s ease, transform 0.25s ease, filter 0.25s ease;
+}
+
+.side-rail a:hover {
+  color: var(--cyan);
+  filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.45));
+  transform: translateY(-4px);
+}
+
+.side-rail svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.side-email {
+  writing-mode: vertical-rl;
+  text-orientation: sideways;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-decoration: none;
+}
+
+.side-rail-right a:hover {
+  transform: translateY(-4px);
+}
+
+@keyframes sideRailInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes sideRailInRight {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (min-width: 1180px) {
+  .side-rail {
+    display: flex;
+  }
+}
+
 /* ─── Button ─────────────────────────────────────────────────── */
 .btn-primary {
   position: relative;
