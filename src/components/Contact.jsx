@@ -101,20 +101,7 @@ export default function Contact() {
         <hr className="hr-cyber mb-12" />
 
         {/* Footer bottom row */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-          {/* Logo/Name */}
-          <div>
-            <div
-              className="font-display text-4xl mb-1"
-              style={{ color: 'var(--cyan)', letterSpacing: '0.25em' }}
-            >
-              SKR
-            </div>
-            <p className="font-mono text-xs" style={{ color: 'var(--muted)' }}>
-              {personal.status}
-            </p>
-          </div>
-
+        <div className="flex items-center justify-center gap-8">
           {/* Social links */}
           <div className="flex items-center gap-2">
             {SOCIAL_LINKS.map((link) => (
@@ -144,11 +131,11 @@ export default function Contact() {
           </div>
 
           {/* Copyright */}
-          <p className="font-mono text-xs text-center md:text-right" style={{ color: 'rgba(255,255,255,0.2)' }}>
+          {/* <p className="font-mono text-xs text-center md:text-right" style={{ color: 'rgba(255,255,255,0.2)' }}>
             © {new Date().getFullYear()} {personal.name}
             <br />
-            Built with React + Vite
-          </p>
+            
+          </p> */}
         </div>
 
         {/* Bottom tagline */}
@@ -157,7 +144,6 @@ export default function Contact() {
             className="font-mono text-xs tracking-widest"
             style={{ color: 'rgba(255,255,255,0.1)', letterSpacing: '0.4em' }}
           >
-            DESIGNED & DEVELOPED WITH ♥ IN COLLEGE STATION, TX
           </p>
         </div>
       </div>
