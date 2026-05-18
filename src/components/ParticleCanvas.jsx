@@ -571,7 +571,7 @@ function drawRoutes(ctx, scene, time, scrollProgress) {
 }
 
 function drawScrollCinematic(ctx, scene, progress, time, width, height) {
-  const impactTarget = scene.starsById.jpmc ?? scene.starsById.pes;
+  const impactTarget = scene.starsById.nyc ?? scene.starsById.jpmc ?? scene.starsById.pes;
   if (!impactTarget) return;
 
   const drop = clamp((progress - 0.02) / 0.18);
