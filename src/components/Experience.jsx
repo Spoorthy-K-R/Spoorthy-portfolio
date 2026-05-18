@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import data from '../data/portfolio.json';
 
 function ExperienceCard({ job, index }) {
@@ -91,7 +92,7 @@ function ExperienceCard({ job, index }) {
   );
 }
 
-export default function Experience() {
+export default memo(function Experience() {
   return (
     <section id="experience" className="pt-20 md:pt-24 pb-8 md:pb-10 px-6 md:px-10 max-w-7xl mx-auto">
       {/* Header */}
@@ -116,3 +117,4 @@ export default function Experience() {
     </section>
   );
 }
+);

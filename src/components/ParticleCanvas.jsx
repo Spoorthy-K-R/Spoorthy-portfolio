@@ -325,6 +325,41 @@ function easeInOutCubic(value) {
   return value < 0.5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2;
 }
 
+function distSq(ax, ay, bx, by) {
+  const dx = ax - bx;
+  const dy = ay - by;
+  return dx * dx + dy * dy;
+}
+
+function buildSpatialGrid(stars, cellSize) {
+  const grid = new Map();
+  for (const star of stars) {
+    const key = ((Math.floor(star.x / cellSize) * 73856093) ^ (Math.floor(star.y / cellSize) * 19349663)) | 0;
+    let cell = grid.get(key);
+    if (!cell) { cell = []; grid.set(key, cell); }
+    cell.push(star);
+  }
+  return grid;
+}
+
+function getNeighborStars(star, grid, cellSize) {
+  const cx = Math.floor(star.x / cellSize);
+  const cy = Math.floor(star.y / cellSize);
+  const result = [];
+  for (let dx = -1; dx <= 1; dx++) {
+    for (let dy = -1; dy <= 1; dy++) {
+      const key = (((cx + dx) * 73856093) ^ ((cy + dy) * 19349663)) | 0;
+      const cell = grid.get(key);
+      if (cell) {
+        for (const neighbor of cell) {
+          if (neighbor !== star) result.push(neighbor);
+        }
+      }
+    }
+  }
+  return result;
+}
+
 function createGenericIntroPoints(count, width, height) {
   const rand = createSeededRandom(8181);
   const centerX = width < 900 ? width * 0.61 : width * 0.73;
@@ -794,14 +829,22 @@ export default function ParticleCanvas() {
     let scene = buildScene(window.innerWidth, window.innerHeight);
     stateRef.current.introStart = performance.now();
 
+    let resizeTimer;
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      scene = buildScene(canvas.width, canvas.height);
-      assignIntroTargets(scene, canvas.width, canvas.height);
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        scene = buildScene(canvas.width, canvas.height);
+        assignIntroTargets(scene, canvas.width, canvas.height);
+      }, 150);
     };
 
-    resize();
+    // Initial build (no debounce)
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    scene = buildScene(canvas.width, canvas.height);
+    assignIntroTargets(scene, canvas.width, canvas.height);
     window.addEventListener('resize', resize);
 
     const onMouseMove = (event) => {
@@ -820,6 +863,9 @@ export default function ParticleCanvas() {
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
+
+    const MOUSE_RADIUS = 110;
+    const MOUSE_RADIUS_SQ = MOUSE_RADIUS * MOUSE_RADIUS;
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -843,13 +889,15 @@ export default function ParticleCanvas() {
             }
           : getIntroTarget(star, time, introProgress);
 
-        const dx = star.x - mouse.x;
-        const dy = star.y - mouse.y;
-        const distance = Math.hypot(dx, dy);
-        if (introDone && distance < 110 && distance > 0) {
-          const force = ((110 - distance) / 110) * 0.55;
-          star.vx += (dx / distance) * force;
-          star.vy += (dy / distance) * force;
+        // Mouse repulsion — use squared distance to avoid sqrt
+        const mdx = star.x - mouse.x;
+        const mdy = star.y - mouse.y;
+        const mouseDSq = mdx * mdx + mdy * mdy;
+        if (introDone && mouseDSq < MOUSE_RADIUS_SQ && mouseDSq > 0) {
+          const distance = Math.sqrt(mouseDSq);
+          const force = ((MOUSE_RADIUS - distance) / MOUSE_RADIUS) * 0.55;
+          star.vx += (mdx / distance) * force;
+          star.vy += (mdy / distance) * force;
         }
 
         if (introDone) {
@@ -868,43 +916,59 @@ export default function ParticleCanvas() {
         }
       }
 
+      // --- Connection drawing with spatial partitioning ---
       if (introDone || introProgress < 0.32) {
-        for (let i = 0; i < stars.length; i++) {
-          for (let j = i + 1; j < stars.length; j++) {
-          const a = stars[i];
-          const b = stars[j];
+        const maxCellSize = introDone ? 90 : 44;
+        const grid = buildSpatialGrid(stars, maxCellSize);
+        const drawn = new Set();
 
-          const homeDistance = Math.hypot(a.homeX - b.homeX, a.homeY - b.homeY);
-          const connectionDistance = introDone
-            ? a.type === 'ambient' || b.type === 'ambient'
-              ? 60
-              : a.type === 'anchor' || b.type === 'anchor' || a.type === 'relay' || b.type === 'relay'
-                ? 88
-                : a.type === 'outline' || b.type === 'outline'
-                  ? 54
-                  : 66
-            : 44;
+        for (const star of stars) {
+          const neighbors = getNeighborStars(star, grid, maxCellSize);
+          for (const neighbor of neighbors) {
+            // Deduplicate: use pointer identity ordering
+            const pairKey = star.id < neighbor.id ? `${star.id}|${neighbor.id}` : `${neighbor.id}|${star.id}`;
+            if (drawn.has(pairKey)) continue;
+            drawn.add(pairKey);
 
-          if (introDone && homeDistance > connectionDistance) continue;
+            const a = star;
+            const b = neighbor;
 
-          const currentDistance = Math.hypot(a.x - b.x, a.y - b.y);
-          if (currentDistance > connectionDistance) continue;
+            const connectionDistance = introDone
+              ? a.type === 'ambient' || b.type === 'ambient'
+                ? 60
+                : a.type === 'anchor' || b.type === 'anchor' || a.type === 'relay' || b.type === 'relay'
+                  ? 88
+                  : a.type === 'outline' || b.type === 'outline'
+                    ? 54
+                    : 66
+              : 44;
 
-          const opacity = introDone
-            ? (1 - currentDistance / connectionDistance) *
-              (a.type === 'ambient' || b.type === 'ambient'
-                ? 0.08
-                : a.type === 'outline' || b.type === 'outline'
-                  ? 0.14
-                  : 0.11)
-            : (1 - currentDistance / connectionDistance) * 0.13;
+            const connDistSq = connectionDistance * connectionDistance;
 
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(b.x, b.y);
-          ctx.strokeStyle = `rgba(0,229,255,${introDone ? opacity * MAP_CONNECTION_ALPHA_SCALE : opacity * 1.6})`;
-          ctx.lineWidth = a.type === 'anchor' || b.type === 'anchor' ? 0.9 : 0.6;
-          ctx.stroke();
+            if (introDone) {
+              const homeDSq = distSq(a.homeX, a.homeY, b.homeX, b.homeY);
+              if (homeDSq > connDistSq) continue;
+            }
+
+            const curDSq = distSq(a.x, a.y, b.x, b.y);
+            if (curDSq > connDistSq) continue;
+
+            const currentDistance = Math.sqrt(curDSq);
+            const opacity = introDone
+              ? (1 - currentDistance / connectionDistance) *
+                (a.type === 'ambient' || b.type === 'ambient'
+                  ? 0.08
+                  : a.type === 'outline' || b.type === 'outline'
+                    ? 0.14
+                    : 0.11)
+              : (1 - currentDistance / connectionDistance) * 0.13;
+
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = `rgba(0,229,255,${introDone ? opacity * MAP_CONNECTION_ALPHA_SCALE : opacity * 1.6})`;
+            ctx.lineWidth = a.type === 'anchor' || b.type === 'anchor' ? 0.9 : 0.6;
+            ctx.stroke();
           }
         }
       }
@@ -913,12 +977,17 @@ export default function ParticleCanvas() {
         drawRoutes(ctx, scene, time, scrollProgress);
       }
 
+      // --- Batched star drawing: non-glow pass then glow pass ---
+      const introFade = introDone ? 0 : 1 - easeInOutCubic(clamp((introProgress - 0.34) / 0.66));
+      const introColor = 'rgba(130,245,255,1)';
+      const glowStars = [];
+
+      // Pass 1: draw non-glow stars (shadowBlur stays 0)
+      ctx.shadowBlur = 0;
       for (const star of stars) {
         const twinkle = 0.72 + ((Math.sin(time * star.twinkleSpeed + star.twinkleOffset) + 1) / 2) * 0.6;
-        const introFade = introDone ? 0 : 1 - easeInOutCubic(clamp((introProgress - 0.34) / 0.66));
         const introIntensity = clamp((star.introWeight ?? 1) / 12);
         const glowBoost = introFade * introIntensity;
-        const introColor = 'rgba(130,245,255,1)';
         const drawColor = introFade > 0.05 ? introColor : star.color;
         const mapAlphaScale = introDone ? MAP_STAR_ALPHA_SCALE : 1;
         const alpha = Math.min(1, (star.alpha * twinkle * (1 - introFade * 0.15) + glowBoost * 0.34) * mapAlphaScale);
@@ -927,14 +996,25 @@ export default function ParticleCanvas() {
           ? star.type === 'anchor' || star.type === 'relay' || star.r > 1.05
           : star.introGlow && introProgress < 0.34;
 
+        if (useGlow) {
+          glowStars.push({ star, twinkle, glowBoost, drawColor, alpha, radius });
+          continue;
+        }
+
         ctx.beginPath();
         ctx.arc(star.x, star.y, radius, 0, Math.PI * 2);
-        ctx.shadowBlur = useGlow ? (star.glow + glowBoost * 4) * (introDone ? MAP_STAR_GLOW_SCALE : 1) : 0;
-        ctx.shadowColor = useGlow
-          ? introFade > 0.05
-            ? withAlpha(introColor, 0.56 + glowBoost * 0.2)
-            : withAlpha(star.color, (star.type === 'anchor' ? 0.72 : 0.55) * MAP_STAR_GLOW_SCALE)
-          : 'transparent';
+        ctx.fillStyle = withAlpha(drawColor, alpha);
+        ctx.fill();
+      }
+
+      // Pass 2: draw glow stars (shadowBlur set once)
+      for (const { star, glowBoost, drawColor, alpha, radius } of glowStars) {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, radius, 0, Math.PI * 2);
+        ctx.shadowBlur = (star.glow + glowBoost * 4) * (introDone ? MAP_STAR_GLOW_SCALE : 1);
+        ctx.shadowColor = introFade > 0.05
+          ? withAlpha(introColor, 0.56 + glowBoost * 0.2)
+          : withAlpha(star.color, (star.type === 'anchor' ? 0.72 : 0.55) * MAP_STAR_GLOW_SCALE);
         ctx.fillStyle = withAlpha(drawColor, alpha);
         ctx.fill();
       }
@@ -950,6 +1030,7 @@ export default function ParticleCanvas() {
     draw();
 
     return () => {
+      clearTimeout(resizeTimer);
       cancelAnimationFrame(stateRef.current.animId);
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', onMouseMove);

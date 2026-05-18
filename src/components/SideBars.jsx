@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import data from '../data/portfolio.json';
 
 const GithubIcon = () => (
@@ -40,7 +41,7 @@ const SOCIAL_LINKS = [
   { key: 'kaggle', label: 'Kaggle', Icon: KaggleIcon },
 ];
 
-export default function SideBars() {
+export default memo(function SideBars() {
   const { personal } = data;
 
   return (
@@ -62,4 +63,4 @@ export default function SideBars() {
       </aside>
     </>
   );
-}
+});

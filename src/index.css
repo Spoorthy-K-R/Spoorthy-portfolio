@@ -73,6 +73,8 @@ body {
   );
   pointer-events: none;
   z-index: 9998;
+  will-change: transform;
+  contain: strict;
 }
 
 /* ─── Noise Texture ──────────────────────────────────────────── */
@@ -84,14 +86,36 @@ body {
   pointer-events: none;
   z-index: 9997;
   opacity: 0.4;
+  will-change: transform;
+  contain: strict;
+}
+
+/* ─── Reduced Motion ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .scanlines::before,
+  .noise::after {
+    display: none;
+  }
+  .marquee-track {
+    animation: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 /* ─── Glassmorphism ──────────────────────────────────────────── */
 .glass {
-  background: var(--glass);
+  background: rgba(17, 17, 17, 0.82);
+  border: 1px solid var(--border);
+}
+
+/* Full blur only for navbar — heavier but limited to one element */
+.glass-blur {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border);
 }
 
 .glass-hover {

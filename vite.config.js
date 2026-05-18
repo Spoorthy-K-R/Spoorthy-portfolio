@@ -4,4 +4,14 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   base: '/Spoorthy-portfolio/',
   plugins: [react()],
+  build: {
+    cssCodeSplit: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+        },
+      },
+    },
+  },
 })

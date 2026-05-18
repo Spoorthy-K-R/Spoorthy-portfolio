@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import data from '../data/portfolio.json';
 
 const GithubIcon = () => (
@@ -39,7 +40,7 @@ const SOCIAL_LINKS = [
   },
 ];
 
-export default function Contact() {
+export default memo(function Contact() {
   const { personal } = data;
 
   return (
@@ -149,4 +150,4 @@ export default function Contact() {
       </div>
     </section>
   );
-}
+});

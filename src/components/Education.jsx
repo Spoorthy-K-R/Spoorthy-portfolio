@@ -1,6 +1,7 @@
+import { memo } from 'react';
 import data from '../data/portfolio.json';
 
-export default function Education() {
+export default memo(function Education() {
   return (
     <section id="education" className="pt-8 md:pt-10 pb-20 md:pb-24 px-6 md:px-10 max-w-7xl mx-auto">
       <div className="reveal mb-10">
@@ -82,4 +83,4 @@ export default function Education() {
       </div>
     </section>
   );
-}
+});
