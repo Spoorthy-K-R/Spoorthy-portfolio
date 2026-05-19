@@ -232,24 +232,24 @@ function Publications() {
         {data.publications.map((pub, i) => (
           <div
             key={i}
-            className="glass glass-hover reveal p-5 rounded-sm"
+            className="glass glass-hover reveal p-4 sm:p-5 rounded-sm"
             style={{ transitionDelay: `${i * 0.1}s` }}
           >
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-3 sm:gap-4">
               <span
-                className="font-display text-3xl mt-1 flex-shrink-0"
+                className="font-display text-2xl sm:text-3xl mt-1 flex-shrink-0"
                 style={{ color: 'var(--cyan)', opacity: 0.4 }}
               >
                 {String(i + 1).padStart(2, '0')}
               </span>
-              <div>
-                <p className="font-body text-sm leading-relaxed mb-2" style={{ color: '#ccc' }}>
+              <div className="min-w-0 flex-1">
+                <p className="font-body text-sm leading-relaxed mb-2 break-words" style={{ color: '#ccc' }}>
                   {pub.title}
                 </p>
-                <p className="font-mono text-xs" style={{ color: 'var(--cyan)', opacity: 0.7 }}>
+                <p className="font-mono text-xs break-words" style={{ color: 'var(--cyan)', opacity: 0.7 }}>
                   {pub.venue}
                 </p>
-                <p className="font-mono text-xs mt-1" style={{ color: 'rgba(255,255,255,0.25)' }}>
+                <p className="font-mono text-xs mt-1 break-words" style={{ color: 'rgba(255,255,255,0.25)' }}>
                   DOI: {pub.doi}
                 </p>
               </div>
@@ -289,8 +289,7 @@ export default function Projects() {
       <div className="mb-8">
         <div
           ref={null}
-          className="project-card holo-border reveal"
-          style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}
+          className="project-card holo-border reveal grid grid-cols-1 md:grid-cols-2"
         >
           <div className="card-overlay" />
 
