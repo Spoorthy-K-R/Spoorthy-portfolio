@@ -19,9 +19,65 @@ function useTypewriter(text, speed = 45, delay = 800) {
   return displayed;
 }
 
+function publicAsset(path) {
+  return `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`;
+}
+
+function HeroPortrait({ src, mounted }) {
+  return (
+    <div
+      className="relative mx-auto aspect-square w-[min(46vw,11.5rem)] flex-shrink-0 sm:w-[12.5rem] md:w-[13.5rem] lg:mx-0 lg:w-[15.5rem] xl:w-[17rem]"
+      style={{
+        opacity: mounted ? 1 : 0,
+        transform: mounted ? 'translateX(0) scale(1)' : 'translateX(-24px) scale(0.96)',
+        transition: 'all 1s cubic-bezier(0.23,1,0.32,1) 0.55s',
+      }}
+    >
+      <div
+        className="absolute -inset-5 rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(0,229,255,0.14), transparent 66%)',
+          filter: 'blur(14px)',
+        }}
+      />
+      <div
+        className="absolute inset-0 rounded-full pointer-events-none"
+        style={{
+          border: '1px solid rgba(0,229,255,0.24)',
+          boxShadow: 'inset 0 0 26px rgba(0,229,255,0.08), 0 0 30px rgba(0,229,255,0.12)',
+        }}
+      />
+      <div
+        className="relative h-full w-full overflow-hidden rounded-full"
+        style={{
+          background: 'var(--bg3)',
+          maskImage: 'radial-gradient(circle, black 58%, transparent 82%)',
+          WebkitMaskImage: 'radial-gradient(circle, black 58%, transparent 82%)',
+        }}
+      >
+        <img
+          src={src}
+          alt="Spoorthy K.R."
+          className="h-full w-full object-cover"
+          style={{ filter: 'grayscale(0.08) saturate(0.82) contrast(1.08)' }}
+        />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'radial-gradient(circle at 48% 38%, transparent 38%, rgba(0,0,0,0.36) 72%), repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.04) 3px, rgba(255,255,255,0.04) 4px)',
+            mixBlendMode: 'screen',
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
 export default function Hero() {
   const { personal } = data;
   const role = useTypewriter(personal.role, 40, 1000);
+  const profilePhoto = publicAsset(personal.profilePhoto);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -76,126 +132,132 @@ export default function Hero() {
       />
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10 w-full pt-24 pb-16">
-        {/* Status badge */}
-        <div
-          className="status-badge mb-8 inline-flex"
-          style={{
-            opacity: mounted ? 1 : 0,
-            transform: mounted ? 'translateY(0)' : 'translateY(-10px)',
-            transition: 'all 0.6s ease 0.2s',
-          }}
-        >
-          <span className="status-dot" />
-          {personal.status}
-        </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10 w-full pt-24 pb-14">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(180px,0.3fr)_minmax(0,1fr)] items-center gap-8 lg:gap-11 xl:gap-12">
+          <HeroPortrait src={profilePhoto} mounted={mounted} />
 
-        {/* Name */}
-        <h1
-          className="glitch font-display leading-none mb-2"
-          data-text={personal.fullName.toUpperCase()}
-          style={{
-            fontSize: 'clamp(2.6rem, 8.6vw, 7.8rem)',
-            letterSpacing: '0.04em',
-            color: '#f0f0f0',
-            opacity: mounted ? 1 : 0,
-            transform: mounted ? 'translateY(0)' : 'translateY(30px)',
-            transition: 'all 0.8s cubic-bezier(0.23,1,0.32,1) 0.4s',
-          }}
-        >
-          {personal.fullName.toUpperCase()}
-        </h1>
+          <div className="min-w-0">
+            {/* Status badge */}
+            <div
+              className="status-badge mb-8 inline-flex"
+              style={{
+                opacity: mounted ? 1 : 0,
+                transform: mounted ? 'translateY(0)' : 'translateY(-10px)',
+                transition: 'all 0.6s ease 0.2s',
+              }}
+            >
+              <span className="status-dot" />
+              {personal.status}
+            </div>
 
-        {/* Role typewriter */}
-        <div
-          className="flex items-center gap-3 mb-6"
-          style={{
-            opacity: mounted ? 1 : 0,
-            transition: 'opacity 0.6s ease 0.9s',
-          }}
-        >
-          <span
-            className="font-mono text-sm md:text-base tracking-widest cursor-blink"
-            style={{ color: 'var(--cyan)', letterSpacing: '0.15em' }}
-          >
-            {role || '\u00A0'}
-          </span>
-        </div>
+            {/* Name */}
+            <h1
+              className="glitch font-display leading-none mb-2"
+              data-text={personal.fullName.toUpperCase()}
+              style={{
+                fontSize: 'clamp(2.5rem, 6.7vw, 6.8rem)',
+                letterSpacing: '0.04em',
+                color: '#f0f0f0',
+                opacity: mounted ? 1 : 0,
+                transform: mounted ? 'translateY(0)' : 'translateY(30px)',
+                transition: 'all 0.8s cubic-bezier(0.23,1,0.32,1) 0.4s',
+              }}
+            >
+              {personal.fullName.toUpperCase()}
+            </h1>
 
-        {/* Divider */}
-        <div
-          className="hr-cyber mb-8"
-          style={{
-            maxWidth: '400px',
-            opacity: mounted ? 1 : 0,
-            transition: 'opacity 0.6s ease 1.2s',
-          }}
-        />
-
-        {/* Tagline */}
-        <p
-          className="text-base md:text-lg leading-relaxed mb-10 max-w-xl"
-          style={{
-            color: '#999',
-            opacity: mounted ? 1 : 0,
-            transform: mounted ? 'translateY(0)' : 'translateY(15px)',
-            transition: 'all 0.8s ease 1.3s',
-          }}
-        >
-          {personal.tagline}
-        </p>
-
-        {/* CTAs */}
-        <div
-          className="flex flex-wrap items-center gap-4"
-          style={{
-            opacity: mounted ? 1 : 0,
-            transform: mounted ? 'translateY(0)' : 'translateY(15px)',
-            transition: 'all 0.8s ease 1.5s',
-          }}
-        >
-          <button className="btn-primary" onClick={() => scrollTo('#projects')}>
-            View Projects
-          </button>
-          <button className="btn-secondary" onClick={() => scrollTo('#contact')}>
-            Get in Touch
-          </button>
-          <a
-            href={personal.resume}
-            download="Spoorthy-KR-Resume.pdf"
-            className="btn-secondary"
-            aria-label="Download Spoorthy K.R. resume"
-          >
-            Download Resume
-          </a>
-        </div>
-
-        {/* Stats row */}
-        <div
-          className="flex flex-wrap gap-8 mt-16"
-          style={{
-            opacity: mounted ? 1 : 0,
-            transition: 'opacity 0.8s ease 1.8s',
-          }}
-        >
-          {[
-            { value: '2+', label: 'Years at JPMorgan' },
-            { value: '2', label: 'IEEE Publications' },
-            { value: '4.0', label: 'GPA @ TAMU' },
-            { value: '$15B+', label: 'Trade Volume Served' },
-          ].map((stat) => (
-            <div key={stat.label} className="flex flex-col">
+            {/* Role typewriter */}
+            <div
+              className="flex items-center gap-3 mb-6"
+              style={{
+                opacity: mounted ? 1 : 0,
+                transition: 'opacity 0.6s ease 0.9s',
+              }}
+            >
               <span
-                className="font-display text-3xl md:text-4xl glow-text"
-                style={{ color: 'var(--cyan)', letterSpacing: '0.05em' }}
+                className="font-mono text-sm md:text-base tracking-widest cursor-blink"
+                style={{ color: 'var(--cyan)', letterSpacing: '0.15em' }}
               >
-                {stat.value}
-              </span>
-              <span className="font-mono text-xs mt-1" style={{ color: 'var(--muted)' }}>
-                {stat.label}
+                {role || '\u00A0'}
               </span>
             </div>
-          ))}
+
+            {/* Divider */}
+            <div
+              className="hr-cyber mb-8"
+              style={{
+                maxWidth: '400px',
+                opacity: mounted ? 1 : 0,
+                transition: 'opacity 0.6s ease 1.2s',
+              }}
+            />
+
+            {/* Tagline */}
+            <p
+              className="text-base md:text-lg leading-relaxed mb-10 max-w-xl"
+              style={{
+                color: '#999',
+                opacity: mounted ? 1 : 0,
+                transform: mounted ? 'translateY(0)' : 'translateY(15px)',
+                transition: 'all 0.8s ease 1.3s',
+              }}
+            >
+              {personal.tagline}
+            </p>
+
+            {/* CTAs */}
+            <div
+              className="flex flex-wrap items-center gap-4"
+              style={{
+                opacity: mounted ? 1 : 0,
+                transform: mounted ? 'translateY(0)' : 'translateY(15px)',
+                transition: 'all 0.8s ease 1.5s',
+              }}
+            >
+              <button className="btn-primary" onClick={() => scrollTo('#projects')}>
+                View Projects
+              </button>
+              <button className="btn-secondary" onClick={() => scrollTo('#contact')}>
+                Get in Touch
+              </button>
+              <a
+                href={personal.resume}
+                download="Spoorthy-KR-Resume.pdf"
+                className="btn-secondary"
+                aria-label="Download Spoorthy K.R. resume"
+              >
+                Download Resume
+              </a>
+            </div>
+
+            {/* Stats row */}
+            <div
+              className="flex flex-wrap gap-8 mt-16"
+              style={{
+                opacity: mounted ? 1 : 0,
+                transition: 'opacity 0.8s ease 1.8s',
+              }}
+            >
+              {[
+                { value: '2+', label: 'Years at JPMorgan' },
+                { value: '2', label: 'IEEE Publications' },
+                { value: '4.0', label: 'GPA @ TAMU' },
+                { value: '$15B+', label: 'Trade Volume Served' },
+              ].map((stat) => (
+                <div key={stat.label} className="flex flex-col">
+                  <span
+                    className="font-display text-3xl md:text-4xl glow-text"
+                    style={{ color: 'var(--cyan)', letterSpacing: '0.05em' }}
+                  >
+                    {stat.value}
+                  </span>
+                  <span className="font-mono text-xs mt-1" style={{ color: 'var(--muted)' }}>
+                    {stat.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
