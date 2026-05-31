@@ -3,7 +3,7 @@
     "name": "Spoorthy K.R.",
     "fullName": "Spoorthy Kumbashi Raghavendra",
     "role": "ML Engineer & Full-Stack Developer",
-    "tagline": "I am a Master's in Computer Science student at Texas A&M focused on AI, NLP and agentic systems, with experience building LLM pipelines and production-scale microservices infrastructure. Previously a Software Engineer at JPMorgan Chase, I'm now joining Jefferies as a Summer Associate on the Agentic AI team.",
+    "tagline": "I am a Master's in Computer Science student at Texas A&M focused on AI, NLP, and agentic systems, with experience building LLM and RAG pipelines, training and optimizing deep learning models for signal detection and medical image processing, and engineering production-scale microservices infrastructure. Previously a Software Engineer at JPMorgan Chase, I'm now joining Jefferies as a Summer Associate on the Agentic AI team.",
     "email": "spoorthykr1801@gmail.com",
     "resume": "resume.pdf",
     "profilePhoto": "profile-photo.jpg",
@@ -22,7 +22,7 @@
       "degree": "Master's in Computer Science",
       "period": "Aug 2025 – May 2027",
       "gpa": "4.0 / 4.0",
-      "courses": ["Deep Learning", "NLP", "Analysis of Algorithms"]
+      "courses": ["Deep Learning", "NLP", "Information Storage and Retrieval", "Analysis of Algorithms", "Operating Systems"]
     },
     {
       "school": "PES University",
@@ -78,6 +78,28 @@
   "projects": [
     {
       "id": 1,
+      "title": "Constraint-Aware Financial Disclosure Search Engine",
+      "subtitle": "CSCE 670 · Information Retrieval System",
+      "description": "Passage-level SEC 10-K search engine for S&P 100 financial disclosures that combines BM25 lexical retrieval, FinBERT-style dense search, OpenSearch hybrid ranking, and structured constraints over year, sector, geography, ticker, and company. Returns citable evidence passages with transparent score breakdowns, mismatch penalties, and coverage-aware ingestion for missing filings.",
+      "tech": ["OpenSearch", "BM25", "FinBERT", "FastAPI", "Streamlit", "Python", "SEC EDGAR"],
+      "accent": "#7b00ff",
+      "type": "AI/ML",
+      "year": "2026",
+      "link": null
+    },
+    {
+      "id": 2,
+      "title": "Critic-Guided Iterative RAG for QA",
+      "subtitle": "CSCE 638 · Agentic RAG Research",
+      "description": "Agentic retrieval framework that improves RAG reliability by using an LLM critic to evaluate context sufficiency, rewrite weak queries, and iteratively retrieve better evidence before answer generation. Compared baseline, iterative, and agentic RAG pipelines across SQuAD v2.0, HotpotQA, and 2WikiMultihopQA.",
+      "tech": ["RAG", "LLM", "FAISS", "SentenceTransformers", "Qwen", "Gemma", "Python"],
+      "accent": "#00ff9d",
+      "type": "NLP",
+      "year": "2026",
+      "link": null
+    },
+    {
+      "id": 3,
       "title": "Signal Detection in RSMA",
       "subtitle": "IEEE NCC 2023 — Lead Author",
       "description": "LSTM-based signal detection for beyond-5G networks using Rate-Splitting Multiple Access. Outperforms conventional algorithms in noisy, multi-user channels using temporal sequence modeling to minimize bit error rates.",
@@ -88,7 +110,7 @@
       "link": null
     },
     {
-      "id": 2,
+      "id": 4,
       "title": "Radiogenomic Brain Tumor Classification",
       "subtitle": "IEEE INDICON 2022 — Lead Author",
       "description": "Transfer learning with ResNet & AlexNet to predict IDH genetic biomarker status from MRI scans, enabling chemotherapy response prediction. Achieved 82% accuracy on the RSNA-MICCAI dataset via 3D slice extraction and advanced augmentation.",
@@ -96,28 +118,6 @@
       "accent": "#ff006e",
       "type": "Research",
       "year": "2022",
-      "link": null
-    },
-    {
-      "id": 3,
-      "title": "LLM Financial Filings Analyzer",
-      "subtitle": "RAG Pipeline · Personal Project",
-      "description": "LLM-powered Retrieval-Augmented Generation pipeline that parses SEC 10-K filings, extracts key financial metrics, and indexes them in a vector knowledge base — generating investment-grade portfolio analysis and multi-year comparisons.",
-      "tech": ["LLM", "RAG", "Python", "Vector DB", "SEC API", "Finance"],
-      "accent": "#7b00ff",
-      "type": "AI/ML",
-      "year": "2024",
-      "link": null
-    },
-    {
-      "id": 4,
-      "title": "Kubernetes Monitoring Platform",
-      "subtitle": "JP Morgan Chase · Production System",
-      "description": "Real-time microservices monitoring platform with React frontend and Spring Boot backend. Dynamic pod scaling, live log streaming, and granular trade tracking cut incident resolution time by 40% for the support team.",
-      "tech": ["React", "Spring Boot", "Kubernetes", "Docker", "Java", "Kafka"],
-      "accent": "#00ff9d",
-      "type": "Full Stack",
-      "year": "2023",
       "link": null
     },
     {
@@ -139,7 +139,8 @@
     "Backend & APIs": ["Spring Boot", "Flask", "Django", "GraphQL", "Kafka", "REST"],
     "ML & AI": ["TensorFlow", "Keras", "PyTorch", "LSTM", "BART", "RAG", "spaCy", "NLTK", "scikit-learn"],
     "DevOps & Cloud": ["Docker", "Kubernetes", "Jenkins", "Git", "Maven", "CI/CD"],
-    "Databases": ["Oracle DB", "SQL", "Vector DB", "IntelliJ", "JUnit"]
+    "Databases": ["Oracle DB", "SQL", "Vector DB"],
+    "Tools & Testing": ["IntelliJ", "JUnit"]
   },
 
   "publications": [

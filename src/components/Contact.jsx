@@ -86,7 +86,7 @@ export default memo(function Contact() {
             className="font-body text-base max-w-md mx-auto mb-10"
             style={{ color: 'var(--muted)', lineHeight: '1.8' }}
           >
-            Open to research collaborations, full-time roles, and interesting side projects.
+            Open to research collaborations, full-time roles and interesting side projects.
             Drop a line.
           </p>
           <a

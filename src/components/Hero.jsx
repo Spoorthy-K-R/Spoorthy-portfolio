@@ -242,7 +242,6 @@ export default function Hero() {
                 { value: '2+', label: 'Years at JPMorgan' },
                 { value: '2', label: 'IEEE Publications' },
                 { value: '4.0', label: 'GPA @ TAMU' },
-                { value: '$15B+', label: 'Trade Volume Served' },
               ].map((stat) => (
                 <div key={stat.label} className="flex flex-col">
                   <span

@@ -7,6 +7,7 @@ const CATEGORY_ICONS = {
   'ML & AI': '◉',
   'DevOps & Cloud': '⬡',
   Databases: '⊟',
+  'Tools & Testing': '▣',
 };
 
 const CATEGORY_COLORS = {
@@ -16,6 +17,7 @@ const CATEGORY_COLORS = {
   'ML & AI': '#7b00ff',
   'DevOps & Cloud': '#ffaa00',
   Databases: '#00b8d4',
+  'Tools & Testing': '#f0f0f0',
 };
 
 function SkillCategory({ category, skills, color, icon, index }) {
