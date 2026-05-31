@@ -334,12 +334,6 @@ export default function Projects() {
                 <span key={t} className="tag">{t}</span>
               ))}
             </div>
-            <div className="mt-6 flex items-center gap-2">
-              <span className="font-mono text-xs" style={{ color: featured.accent }}>
-                FEATURED PROJECT
-              </span>
-              <div className="h-px flex-1" style={{ background: `${featured.accent}30` }} />
-            </div>
           </div>
         </div>
       </div>
