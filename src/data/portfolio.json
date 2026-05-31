@@ -85,7 +85,7 @@
       "accent": "#7b00ff",
       "type": "AI/ML",
       "year": "2026",
-      "link": null
+      "link": "https://github.com/Spoorthy-K-R/Financial-disclosure-search-engine"
     },
     {
       "id": 2,
@@ -96,7 +96,7 @@
       "accent": "#00ff9d",
       "type": "NLP",
       "year": "2026",
-      "link": null
+      "link": "https://github.com/HeisenbergsCat03/CSCE638-Project"
     },
     {
       "id": 3,
@@ -107,7 +107,7 @@
       "accent": "#00e5ff",
       "type": "Research",
       "year": "2023",
-      "link": null
+      "link": "https://github.com/Spoorthy-K-R/Deep-Learning-for-RSMA"
     },
     {
       "id": 4,
@@ -118,10 +118,21 @@
       "accent": "#ff006e",
       "type": "Research",
       "year": "2022",
-      "link": null
+      "link": "https://github.com/Spoorthy-K-R/Deep-Learning-based-approach-for-Radiogenomic-Classification-of-Brain-Tumor"
     },
     {
       "id": 5,
+      "title": "AI-Powered Document Classifier",
+      "subtitle": "LLM + OCR Document Processing API",
+      "description": "FastAPI service that processes PDF uploads, extracts text with PyMuPDF and OCR fallback, computes page-level legibility signals, and classifies documents using local LLM inference through Ollama. Includes a Swagger API interface and deployed Heroku endpoint for interactive testing.",
+      "tech": ["FastAPI", "LLM", "OCR", "PyMuPDF", "Tesseract", "Ollama", "Python"],
+      "accent": "#ffaa00",
+      "type": "AI/ML",
+      "year": "2025",
+      "link": "https://github.com/Spoorthy-K-R/AI-powered-document-classifier"
+    },
+    {
+      "id": 6,
       "title": "NLP Topic Summarizer",
       "subtitle": "Multi-source Summarization Platform",
       "description": "BART transformer-powered platform that scrapes raw web content via BeautifulSoup, then generates coherent multi-source topic overviews using abstractive summarization. Deployed with an interactive Flask frontend.",

@@ -213,6 +213,18 @@ function ProjectCard({ project, index }) {
             <span key={t} className="tag">{t}</span>
           ))}
         </div>
+
+        {project.link && (
+          <a
+            href={project.link}
+            target="_blank"
+            rel="noreferrer"
+            className="project-link mt-5"
+            aria-label={`Open ${project.title} on GitHub`}
+          >
+            GitHub
+          </a>
+        )}
       </div>
 
       {/* Bottom accent line */}
@@ -334,6 +346,17 @@ export default function Projects() {
                 <span key={t} className="tag">{t}</span>
               ))}
             </div>
+            {featured.link && (
+              <a
+                href={featured.link}
+                target="_blank"
+                rel="noreferrer"
+                className="project-link mt-6"
+                aria-label={`Open ${featured.title} on GitHub`}
+              >
+                GitHub
+              </a>
+            )}
           </div>
         </div>
       </div>
