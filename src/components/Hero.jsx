@@ -137,38 +137,43 @@ export default function Hero() {
           <HeroPortrait src={profilePhoto} mounted={mounted} />
 
           <div className="min-w-0">
-            {/* Status badge */}
+            {/* Identity badges */}
             <div
-              className="status-badge mb-8 inline-flex"
+              className="flex flex-wrap gap-3 mb-8"
               style={{
                 opacity: mounted ? 1 : 0,
                 transform: mounted ? 'translateY(0)' : 'translateY(-10px)',
                 transition: 'all 0.6s ease 0.2s',
               }}
             >
-              <span className="status-dot" />
-              {personal.status}
+              {personal.heroBadges.map((badge, i) => (
+                <span key={badge} className={i === 0 ? 'hero-pill' : 'hero-pill hero-pill-green'}>
+                  {badge}
+                </span>
+              ))}
             </div>
 
-            {/* Name */}
-            <h1
-              className="glitch font-display leading-none mb-2"
-              data-text={personal.fullName.toUpperCase()}
+            {/* Headline */}
+            <div
+              className="hero-headline mb-7"
               style={{
-                fontSize: 'clamp(2.5rem, 6.7vw, 6.8rem)',
-                letterSpacing: '0.04em',
-                color: '#f0f0f0',
                 opacity: mounted ? 1 : 0,
                 transform: mounted ? 'translateY(0)' : 'translateY(30px)',
                 transition: 'all 0.8s cubic-bezier(0.23,1,0.32,1) 0.4s',
               }}
             >
-              {personal.fullName.toUpperCase()}
-            </h1>
+              <h1
+                className="font-display leading-none"
+                style={{ fontSize: 'clamp(3.5rem, 8.2vw, 8rem)', letterSpacing: '0.02em' }}
+              >
+                <span className="block">{personal.heroHeadline[0]}</span>
+                <span className="block hero-gradient-text">{personal.heroHeadline[1]}</span>
+              </h1>
+            </div>
 
             {/* Role typewriter */}
             <div
-              className="flex items-center gap-3 mb-6"
+              className="flex items-center gap-3 mb-5"
               style={{
                 opacity: mounted ? 1 : 0,
                 transition: 'opacity 0.6s ease 0.9s',
@@ -184,7 +189,7 @@ export default function Hero() {
 
             {/* Divider */}
             <div
-              className="hr-cyber mb-8"
+              className="hr-cyber mb-7"
               style={{
                 maxWidth: '400px',
                 opacity: mounted ? 1 : 0,
@@ -194,9 +199,8 @@ export default function Hero() {
 
             {/* Tagline */}
             <p
-              className="text-base md:text-lg leading-relaxed mb-10 max-w-xl"
+              className="hero-intro text-base md:text-xl leading-relaxed mb-10 max-w-3xl"
               style={{
-                color: '#999',
                 opacity: mounted ? 1 : 0,
                 transform: mounted ? 'translateY(0)' : 'translateY(15px)',
                 transition: 'all 0.8s ease 1.3s',

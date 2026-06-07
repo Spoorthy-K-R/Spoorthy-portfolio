@@ -2,8 +2,10 @@
   "personal": {
     "name": "Spoorthy K.R.",
     "fullName": "Spoorthy Kumbashi Raghavendra",
-    "role": "ML Engineer & Full-Stack Developer",
-    "tagline": "I am a Master's in Computer Science student at Texas A&M focused on AI, NLP, and agentic systems, with experience building LLM and RAG pipelines, training and optimizing deep learning models for signal detection and medical image processing, and engineering production-scale microservices infrastructure. Previously a Software Engineer at JPMorgan Chase, I'm now joining Jefferies as a Summer Associate on the Agentic AI team.",
+    "role": "AI/NLP Engineer & Software Engineer",
+    "tagline": "Hi, I'm Spoorthy. I build intelligent systems that connect AI research with production-grade software, from agentic RAG and financial disclosure search to deep learning models for signal detection and medical imaging. Previously a Software Engineer at JPMorgan Chase, I engineered high-volume financial infrastructure; now I'm bringing that systems mindset to agentic AI at Jefferies.",
+    "heroHeadline": ["Building Agentic AI.", "Engineering Reliable Systems."],
+    "heroBadges": ["AI/NLP ENGINEER", "MASTER'S CS @ TEXAS A&M"],
     "email": "spoorthykr1801@gmail.com",
     "resume": "resume.pdf",
     "profilePhoto": "profile-photo.jpg",
@@ -158,12 +160,14 @@
     {
       "title": "A Two-Tier Deep Neural Network Detector for Two-User Rate-Splitting Multiple Access Systems",
       "venue": "IEEE NCC 2023, Guwahati, India",
-      "doi": "10068068"
+      "doi": "10068068",
+      "link": "https://ieeexplore.ieee.org/document/10068068"
     },
     {
       "title": "Deep Learning Approach for Radiogenomic Classification of Brain Tumor",
       "venue": "IEEE INDICON 2022, Kochi, India",
-      "doi": "10039760"
+      "doi": "10039760",
+      "link": "https://ieeexplore.ieee.org/document/10039760"
     }
   ]
 }
