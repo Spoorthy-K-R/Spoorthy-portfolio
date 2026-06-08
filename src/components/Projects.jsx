@@ -29,9 +29,9 @@ const PROJECT_DETAILS = {
   'Critic-Guided Iterative RAG for QA': {
     tags: ['AGENTIC RAG', 'NLP'],
     bullets: [
-      'Adds an LLM critic to decide whether retrieved context is sufficient before answering.',
-      'Uses query rewriting when evidence is incomplete, partial, or off-topic.',
-      'Compares baseline, iterative, and agentic RAG across QA benchmarks.',
+      'Implements a control loop where an LLM critic evaluates context sufficiency before generating an answer.',
+      'Triggers automatic query rewriting and secondary retrieval passes when evidence is incomplete or off-topic.',
+      'Mitigates hallucinations by ensuring answers are only generated when the retrieved context provides full support.',
     ],
     metrics: [
       { value: '3', label: 'retrieval pipelines compared' },
@@ -377,7 +377,7 @@ function ProjectPanel({ project, index }) {
   const details = PROJECT_DETAILS[project.title] || {
     tags: [project.type],
     bullets: [project.description],
-    metrics: [{ value: project.year, label: project.type }],
+    metrics: [{ value: '', label: project.type }],
     workflow: ['Review the GitHub repository for implementation details.'],
   };
 
@@ -390,7 +390,7 @@ function ProjectPanel({ project, index }) {
 
       <div className="project-panel-header">
         <div className="flex flex-wrap gap-2">
-          {[...details.tags, project.year].map((tag) => (
+          {details.tags.map((tag) => (
             <span key={tag} className="project-pill" style={{ color: project.accent, borderColor: `${project.accent}55`, background: `${project.accent}14` }}>
               {tag}
             </span>

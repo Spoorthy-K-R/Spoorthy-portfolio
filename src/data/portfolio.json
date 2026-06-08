@@ -98,18 +98,16 @@
       "tech": ["OpenSearch", "BM25", "FinBERT", "FastAPI", "Streamlit", "Python", "SEC EDGAR"],
       "accent": "#7b00ff",
       "type": "AI/ML",
-      "year": "2026",
       "link": "https://github.com/Spoorthy-K-R/Financial-disclosure-search-engine"
     },
     {
       "id": 2,
       "title": "Critic-Guided Iterative RAG for QA",
       "subtitle": "CSCE 638 · Agentic RAG Research",
-      "description": "Agentic retrieval framework that improves RAG reliability by using an LLM critic to evaluate context sufficiency, rewrite weak queries, and iteratively retrieve better evidence before answer generation. Compared baseline, iterative, and agentic RAG pipelines across SQuAD v2.0, HotpotQA, and 2WikiMultihopQA.",
+      "description": "Built an agentic Retrieval-Augmented Generation (RAG) system with an LLM-based context critic that iteratively rewrites queries and re-retrieves documents, outperforming single-pass RAG baselines on multi-hop QA benchmarks (HotpotQA, 2WikiMultihopQA, SQuAD v2.0). Evaluated three retrieval pipelines across two LLMs (Qwen2.5-7B, Gemma-2-2B) using dense retrieval with SentenceTransformers and FAISS, measuring Exact Match, Token F1, ROUGE-L, and CharF1 to quantify the impact of critic-guided feedback on answer accuracy.",
       "tech": ["RAG", "LLM", "FAISS", "SentenceTransformers", "Qwen", "Gemma", "Python"],
       "accent": "#00ff9d",
       "type": "NLP",
-      "year": "2026",
       "link": "https://github.com/HeisenbergsCat03/CSCE638-Project"
     },
     {
@@ -120,7 +118,6 @@
       "tech": ["LSTM", "TensorFlow", "Python", "Signal Processing", "5G", "RSMA"],
       "accent": "#00e5ff",
       "type": "Research",
-      "year": "2023",
       "link": "https://github.com/Spoorthy-K-R/Deep-Learning-for-RSMA"
     },
     {
@@ -131,7 +128,6 @@
       "tech": ["ResNet", "AlexNet", "Keras", "Medical Imaging", "Transfer Learning", "Python"],
       "accent": "#ff006e",
       "type": "Research",
-      "year": "2022",
       "link": "https://github.com/Spoorthy-K-R/Deep-Learning-based-approach-for-Radiogenomic-Classification-of-Brain-Tumor"
     },
     {
@@ -142,7 +138,6 @@
       "tech": ["FastAPI", "LLM", "OCR", "PyMuPDF", "Tesseract", "Ollama", "Python"],
       "accent": "#ffaa00",
       "type": "AI/ML",
-      "year": "2025",
       "link": "https://github.com/Spoorthy-K-R/AI-powered-document-classifier"
     },
     {
@@ -153,7 +148,6 @@
       "tech": ["BART", "NLP", "Flask", "Python", "BeautifulSoup", "Transformers"],
       "accent": "#ffaa00",
       "type": "NLP",
-      "year": "2022",
       "link": null
     }
   ],
