@@ -44,12 +44,17 @@
       "location": "Bengaluru, India",
       "color": "#00e5ff",
       "highlights": [
-        "Designed Spring Boot microservices replacing a 40-year-old mainframe processing 250–300k daily FX trades worth $10–15B",
-        "Converted REST APIs to GraphQL reducing frontend load time by ~100ms",
-        "Migrated Oracle databases to secure cloud with minimal downtime",
-        "Built Python automation tools saving the QA team 7–8 hours weekly",
-        "Raised SonarQube security score from 65% to 80%+ and embedded it in CI/CD"
-      ]
+        "Re-architected a 40-year legacy FX settlement platform into Spring Boot microservices, scaling system capacity to handle $10–15B in daily transactions across 250–300k trades with improved fault isolation and service modularity",
+        "Designed event-driven workflows using Kafka to decouple services, improving system resilience and enabling real-time processing across legacy and modern platforms",
+        "Converted REST APIs to GraphQL, reducing frontend payload sizes by 40% and cutting page load times by ~100ms across trading dashboards",
+        "Optimized FX Options settlement pipeline to achieve 95% STP (Straight-Through Processing), reducing manual intervention and improving end-to-end system throughput",
+        "Migrated Oracle databases to secure cloud infrastructure with near-zero downtime using blue-green deployment strategies",
+        "Built Python automation tools for regression testing and environment setup, saving the QA team 7–8 hours of manual effort weekly",
+        "Improved system reliability by automating regression testing (FitNesse), reducing deployment risk and increasing release confidence",
+        "Raised SonarQube security score from 65% to 80%+ and embedded static analysis into CI/CD pipelines to enforce code quality gates",
+        "Enhanced production stability by resolving high-priority incidents and improving monitoring, minimizing downtime in a mission-critical trading system"
+      ],
+      "skills": ["Java", "Spring Boot", "Kafka", "GraphQL", "Python", "Oracle DB", "Microservices", "Docker", "Jenkins", "SonarQube", "FitNesse"]
     },
     {
       "company": "JP Morgan Chase & Co.",
@@ -58,10 +63,14 @@
       "location": "Bengaluru, India",
       "color": "#00b8d4",
       "highlights": [
-        "Led end-to-end development of a real-time Kubernetes microservices monitoring platform",
-        "Implemented dynamic pod scaling, live log streaming, and health monitoring",
-        "Cut resolution time by 40% with real-time failure alerts"
-      ]
+        "Led end-to-end development of a real-time Kubernetes microservices monitoring platform with a React frontend and Spring Boot backend",
+        "Implemented dynamic pod scaling and auto-recovery mechanisms, reducing manual intervention during traffic spikes",
+        "Built live log streaming and aggregation using WebSockets, enabling real-time debugging across distributed services",
+        "Designed a health monitoring dashboard with granular service-level metrics, uptime tracking, and dependency mapping",
+        "Cut incident resolution time by 40% by implementing real-time failure alerts with configurable severity thresholds",
+        "Integrated Prometheus metrics and Grafana dashboards for long-term observability and performance trending"
+      ],
+      "skills": ["React", "Spring Boot", "Kubernetes", "Docker", "WebSockets", "Prometheus", "Grafana", "REST APIs", "Java"]
     },
     {
       "company": "BGSW (Bosch)",
@@ -70,10 +79,13 @@
       "location": "Bengaluru, India",
       "color": "#7b00ff",
       "highlights": [
-        "Built NLP preprocessing pipeline with spaCy/NLTK for symbolic report parsing",
-        "Trained Random Forest & SVM models achieving 85%+ accuracy on EV testing data",
-        "Reduced manual test instruction effort by 60%"
-      ]
+        "Built an end-to-end NLP preprocessing pipeline with spaCy and NLTK for parsing symbolic test reports from EV (Electric Vehicle) testing systems",
+        "Designed feature extraction workflows to convert unstructured text data into structured feature vectors for downstream ML models",
+        "Trained and evaluated Random Forest & SVM classifiers achieving 85%+ accuracy on EV testing datasets, with hyperparameter tuning via grid search",
+        "Developed a prediction interface that reduced manual test instruction effort by 60%, enabling engineers to auto-generate test sequences",
+        "Presented findings and a working demo to the Bosch R&D leadership team, receiving commendation for project impact"
+      ],
+      "skills": ["Python", "spaCy", "NLTK", "scikit-learn", "Random Forest", "SVM", "NLP", "Pandas", "NumPy"]
     }
   ],
 
