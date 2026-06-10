@@ -98,7 +98,7 @@
       "tech": ["OpenSearch", "BM25", "FinBERT", "FastAPI", "Streamlit", "Python", "SEC EDGAR"],
       "accent": "#7b00ff",
       "type": "AI/ML",
-      "link": "https://github.com/Spoorthy-K-R/Financial-disclosure-search-engine"
+      "link": "https://spoorthy1801-financial-search-engine.hf.space/"
     },
     {
       "id": 2,
