@@ -146,6 +146,30 @@ const PROJECT_DETAILS = {
       output: 'Coherent topic overview',
     },
   },
+  'Financial Research Agent Platform': {
+    tags: ['AI AGENTS', 'FINANCE'],
+    bullets: [
+      'Automates financial research using an ensemble of specialized AI agents.',
+      'Aggregates real-time market data, earnings reports, and news sentiment.',
+      'Generates comprehensive analysis reports with citations and structured data.',
+    ],
+    metrics: [
+      { value: 'Agents', label: 'specialized roles' },
+      { value: 'Real-time', label: 'market data ingestion' },
+      { value: 'Web', label: 'interactive platform' },
+    ],
+    workflow: [
+      'User requests research on a specific stock, sector, or macroeconomic trend.',
+      'Data-gathering agents fetch real-time pricing, news, and financial statements.',
+      'Analyst agents process the raw data to identify trends and summarize sentiment.',
+      'The platform compiles the findings into a structured, easy-to-read report.',
+    ],
+    diagram: {
+      title: 'Agentic research workflow',
+      nodes: ['User Query', 'Data Agents', 'Analyst Agents', 'Report Generator', 'Web UI'],
+      output: 'Actionable financial insights',
+    },
+  },
 };
 
 function FlowDot({ delay = 0 }) {
@@ -350,6 +374,35 @@ function SummarizerArchitecture({ project }) {
   );
 }
 
+function FinancialAgentArchitecture({ project }) {
+  return (
+    <div className="arch-scene summary-scene" style={{ '--project-accent': project.accent }}>
+      <div className="arch-grid" />
+      <p className="arch-title">Multi-agent research pipeline</p>
+      <div className="summary-layout">
+        <div className="web-pages">
+          {[0, 1].map((agent) => (
+            <div key={agent} className="web-page">
+              <span style={{ backgroundColor: project.accent, opacity: 0.5 }} />
+              <span />
+            </div>
+          ))}
+        </div>
+        <div className="bart-core" style={{ border: `1px solid ${project.accent}50` }}>
+          <strong style={{ color: project.accent }}>LangChain</strong>
+          <span>Agent Swarm</span>
+        </div>
+        <div className="summary-output">
+          <strong>Research Report</strong>
+          <span />
+          <span />
+          <span />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ProjectMotionDiagram({ project, details }) {
   if (project.title === 'Constraint-Aware Financial Disclosure Search Engine') {
     return <FinancialSearchArchitecture project={project} />;
@@ -368,6 +421,9 @@ function ProjectMotionDiagram({ project, details }) {
   }
   if (project.title === 'NLP Topic Summarizer') {
     return <SummarizerArchitecture project={project} />;
+  }
+  if (project.title === 'Financial Research Agent Platform') {
+    return <FinancialAgentArchitecture project={project} />;
   }
   return <RagArchitecture project={project} details={details} />;
 }

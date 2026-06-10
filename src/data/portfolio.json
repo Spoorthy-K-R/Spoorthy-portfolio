@@ -149,6 +149,16 @@
       "accent": "#ffaa00",
       "type": "NLP",
       "link": null
+    },
+    {
+      "id": 7,
+      "title": "Financial Research Agent Platform",
+      "subtitle": "Automated Financial Analysis & Insights",
+      "description": "Agentic platform that performs comprehensive financial research, analyzing market data, company performance, and news sentiment. Provides actionable insights and structured reports through an interactive web interface.",
+      "tech": ["Next.js", "React", "LLMs", "LangChain", "Agents", "Tailwind CSS"],
+      "accent": "#00ff9d",
+      "type": "AI/ML",
+      "link": "https://financial-research-agent-platform.vercel.app/"
     }
   ],
 
