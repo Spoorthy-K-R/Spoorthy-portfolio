@@ -22,15 +22,32 @@ function ExperienceThumbnail({ job }) {
   const isSE1 = job.role === "Software Engineer I";
   const isIntern = job.role === "Software Engineering Intern";
   const isML = job.role === "Machine Learning Project Trainee";
+  const isJefferies = job.role === "Technology Summer Associate";
 
   return (
     <div className="arch-scene" style={{ '--project-accent': job.color, minHeight: '280px', display: 'flex', flexDirection: 'column' }}>
       <div className="arch-grid" />
       <p className="arch-title mb-4">
-        {isSE1 ? "Microservice settlement architecture" : isIntern ? "K8s observability pipeline" : "NLP inference pipeline"}
+        {isJefferies ? "Agentic settlement diagnosis pipeline" : isSE1 ? "Microservice settlement architecture" : isIntern ? "K8s observability pipeline" : "NLP inference pipeline"}
       </p>
 
       <div className="relative flex-1 flex items-center justify-center w-full h-full">
+        {isJefferies && (
+          <div className="w-full h-full flex flex-col items-center justify-center gap-4">
+            <div className="flex items-center gap-4 z-10 w-full">
+              <div className="border border-white/10 bg-white/5 rounded px-3 py-3 text-[10px] font-mono text-center flex-1">Trade Failures<br/><span className="text-white/40">States + Deps</span></div>
+              <div className="h-[2px] flex-1 bg-white/10 relative">
+                <FlowDot delay={0} color={job.color} />
+              </div>
+              <div className="border border-[var(--project-accent)] bg-[var(--project-accent)]/10 rounded px-3 py-3 text-[10px] font-mono text-[var(--project-accent)] text-center flex-1 shadow-[0_0_15px_rgba(0,255,157,0.2)]">Agentic Dx<br/><span className="text-white/60">Clustering</span></div>
+              <div className="h-[2px] flex-1 bg-white/10 relative">
+                <FlowDot delay={0.5} color={job.color} />
+              </div>
+              <div className="border border-[var(--project-accent)] bg-[var(--project-accent)]/20 rounded px-3 py-3 text-[10px] font-mono text-[var(--project-accent)] text-center flex-1 shadow-[0_0_20px_rgba(0,255,157,0.3)]">MDP Engine<br/><span className="text-white/80">RL Loop</span></div>
+            </div>
+          </div>
+        )}
+
         {isSE1 && (
           <div className="w-full h-full flex items-center justify-between px-2 gap-4">
             <div className="flex flex-col gap-3 z-10">

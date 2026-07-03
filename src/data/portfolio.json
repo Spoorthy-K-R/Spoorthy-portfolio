@@ -7,7 +7,7 @@
     "heroHeadline": ["Spoorthy Kumbashi Raghavendra"],
     "heroBadges": ["AI/NLP ENGINEER", "MASTER'S CS @ TEXAS A&M"],
     "email": "spoorthykr1801@gmail.com",
-    "resume": "resume.pdf",
+    "resume": "Spoorthy-KR-Resume.pdf",
     "profilePhoto": "profile-photo.jpg",
     "github": "https://github.com/Spoorthy-K-R",
     "linkedin": "https://linkedin.com/in/spoorthy-k-r/",
@@ -37,6 +37,18 @@
   ],
 
   "experience": [
+    {
+      "company": "Jefferies LLC",
+      "role": "Technology Summer Associate",
+      "period": "Jun 2026 – Aug 2026",
+      "location": "Jersey City, NJ, USA",
+      "color": "#00ff9d",
+      "highlights": [
+        "Developed an agentic system to diagnose trade settlement failures by mapping dependency chains across system states and inventory data, with dynamic clustering by root cause and priority to maximize resolution with minimal manual action",
+        "Modeled a Markov Decision Process (MDP) recommendation engine constrained by business logic to predict optimal resolution paths, integrating a reinforcement learning loop to iteratively update the policy model based on operator overrides"
+      ],
+      "skills": ["Python", "Reinforcement Learning", "MDP", "Agentic AI", "Clustering", "Data Engineering"]
+    },
     {
       "company": "JP Morgan Chase & Co.",
       "role": "Software Engineer I",
